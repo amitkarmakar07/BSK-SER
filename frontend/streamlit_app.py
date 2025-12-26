@@ -81,7 +81,12 @@ service_id_to_name = dict(zip(df_service_names['service_id'], df_service_names['
 # Load CSV files instead of using database
 @st.cache_data
 def load_citizen_master():
-    return pd.read_csv(os.path.join(DATA_DIR, "ml_citizen_master.csv"), encoding="latin-1")
+    file_path = os.path.join(DATA_DIR, "ml_citizen_master.csv")
+    if os.path.exists(file_path):
+        return pd.read_csv(file_path, encoding="latin-1")
+    else:
+        # Return empty DataFrame if file doesn't exist
+        return pd.DataFrame()
 
 @st.cache_data
 def load_provision_data():
@@ -95,6 +100,11 @@ def load_provision_data():
 @st.cache_data
 def get_citizen_details(citizen_id):
     citizen_master = load_citizen_master()
+    
+    # Handle case when citizen_master is empty
+    if citizen_master.empty:
+        return pd.DataFrame()
+    
     df = citizen_master[citizen_master['citizen_id'] == citizen_id]
     return df
 
