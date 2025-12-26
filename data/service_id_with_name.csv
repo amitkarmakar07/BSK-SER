@@ -1,0 +1,423 @@
+service_id,service_name
+1,Search - Application Status of Kanyasree Prakalpa
+2,Application for Aikyasree Scholarship
+4,Application for Income Certificates
+6,Caste Certificate
+10,Apply - Online Application for WBPRB
+11,Online Application for WBMSC
+13,Different Taxes of Gram Panchayats
+14,Municipality Tax Payments
+16,Trade registration under Gram Panchayats
+17,Apply - Passport Applications
+20,Know your property
+22,Apply - Land Revenue (Khajna)
+23,SEBA
+63,Apply - Bangla Shasya Bima
+104,"Firms, Societies and Non- Trading Corporations-Duplicate certificate"
+64,Search - Bangla Shasya Bima
+65,Krishi Sinchayee Scheme
+66,Kisan Credit Card
+67,Farmer pensioner Ex-Gratia
+68,Farmer pensioner legal heir
+69,Apply - Krishak Bandhu Scheme
+70,New agricultural subsidy
+71,Soil Health Card
+72,Cultivation Info
+73,Apply - Fertilizer License Application
+74,Fertilizer license renewal/modification
+75,Apply - Seed License
+76,Renewal - Seed License
+77,Modify - Seed License
+78,Renew Insecticide License
+79,New Insecticide License
+80,Modify  Insecticide License
+81,Application Credit linked subsidy CHC
+82,Crop Cutting data upload
+83,Crop condition report
+84,Search  - Kishan Mandi Information
+85,Apply - Sufal Bangla Individual Enrollment Form
+86,Search - Price Information
+87,Apply - Application for Farm Produce Transport
+88,Search - Price Information of Daily Market
+89,Register - Online Marketing (Farming)
+90,Apply e-permit (agrimarket)
+91,Search - Diary Scheme Information
+118,Apply - Excise Crime Reporting - Citizen
+92,Search - Livestock Scheme
+94,Search - Sabuj Sathi Scheme Information
+95,Search - Sikshashree Information
+96,Search - Taposali Bandhu Pension Scheme
+97,Apply - Consumer Grievance
+98,Search - Consumer Rights Information
+99,Register - For e-Parimap 
+100,Apply - License for e-Parimap
+101,Search - Right to Public Services Information
+102,Search - Cooperative information
+103,"Firms, Societies and Non- Trading Corporations-Registration"
+377,Test Service 2
+105,Register - Cooperative Society
+106,Apply - Change of name in Cooperative Society
+107,Search - Cooperative Society Finance Rules
+108,"Apply - Special Compassionate Appointment (Covid-19) Scheme, 2020"
+109,Apply - PSC Job Application
+110,Deed e-Registration
+119,Payment - Tax or Fees
+111,Deed - Certified Copy
+112,Valuation - Stamp Duty Information
+113,Apply - New Excise License
+114,Renewal - Excise License
+115,Payment - Excise Duty Fee
+116,Apply - Temporary Bar License Application
+117,Register - Retail Liquor Outlet
+269,Information on tribal pension under Jai Bangla
+120,Apply - Renewal of Fire Safety Certificate
+121,Apply - Issuance of Fire Safety Certificate
+122,Fishery development schemes info
+123,booking BENFISH properties
+124,Apply - Farmer Registration Paddy Sale
+125,Search  - Payment Status of Paddy Sold
+126,Apply - New Digital Ration Card
+127,Search - Application Status of Digital Ration Card Application
+128,Apply - Aadhaar & Mobile Link with Digital Ration Card
+129,Food grain entitlements & helpdesk no. display
+130,Search - Food Processing & Horticulture Schemes Information
+131,Apply for Birth & Death Certificate
+132,Apply Janani Suraksha Yojana
+133,Apply Maternity Schemes
+134,Apply Nikshay Poshan Yojana
+135,Apply Family Planning Compensation
+136,Apply  Janani Shishu Suraksha Karyakram
+137,Apply - Swasthya Sathi Enrolment Certificate New Registration (Form â B)
+138,Apply - OPD Registration
+139,Search - COVID Patient Information
+140,Search - Blood Test Report
+141,Blood availability info
+142,Organ transplant procedure
+143,Registration - Shishu Sathi
+144,Ambulance booking
+145,Complaint Lodging-WBCERC
+146,Apply - Swami Vivekananda Scholarship
+147,college admission application
+148,Application for correction of mark sheets
+149,Download:e-learning materials
+150,Download & submit assignments
+151,Apply - Local Residence (Domicile) Certificate
+152,Apply - Refinance of Term Loan
+384,Search - Fertilizer License Status 
+153,Search - Transfer Case of Arms License Information
+154,Apply - Gorkha Certificate
+155,Apply - Submission of Form for Electoral Roll
+156,Apply - Verification of Electoral Roll Online
+157,Search - Firecracker License Information
+158, Search - Term Loan Status
+159,Apply - Lok Prasar Scheme
+160,Search - Agriculture & Irrigation Schemes
+171,Apply - Map Service
+172,Search - Property Information
+161,Apply - Building and other Construction Workers Pension Scheme
+162,Search - Subscription of Building and other Construction Workers Pension Scheme Information
+163,Search - Registration of Transport Workers Pension Scheme Information
+164,Apply - Samajik Suraksha Yojana Application 
+165,Apply - Yuvashree Scheme Application 
+166,Apply - Unemployment Allowance Application 
+167,"Apply - Shops & Establishment, Register - New/ Renewal of Certificate for Registration"
+168,Apply - Mutation Application
+169,Apply - ROR Application 
+170,Apply - Plot Information
+385,Download - Certificate of Fertilizer License
+173,Apply - Marriage Certificate 
+174,Search - Mass Education & Library Related Schemes Information
+175,Apply - Karma Sathi Prakalpa Scheme
+176,Apply - Banglashree Scheme
+177,Application for Aikyashree Scholarship
+178,Apply - Educational Loan Application
+179,Apply - Fresh Term Loan Application
+180,Apply - SHG Loan Application
+181,Application for Swami Vivekananda Merit Cum Means Scholarship Scheme for Minorities
+182,Apply - Construction of Boundary Wall
+386,Search - Insecticide License Status 
+183,Modify - Term Loan Application
+184,Search - Bangla Awas Yojana
+185,Search - Anandadhara Scheme
+186,Search - Guideline & View Job Card Detail
+187,Search- Nirmal Bangla scheme
+188,Search- Samabyathi Scheme Information
+189,NOAPS
+190, NFBS
+191,NMBS
+192,Application for EWS Certificates
+194,Search - Gram Panchayat Tax Payment
+195,Apply - Online Trade Registration
+196,Apply - Citizens Grievance Redressal
+197,Information on Hasir Alo scheme
+198,Apply - New Electricity Connection of LT/HT Application
+199,Apply - Payment of WBSEDCL Electricity Bill
+200,Apply - New Workman Permit
+201,Apply - New Electrical Supervisor License
+202,Apply - Renewal of Electrical Supervisor License
+203,Apply - Contractors License
+204,Apply - Renewal of Workman Permit
+218,Search - Muktidhara Scheme Information 
+387,Download - Certificate of Insecticide License
+205,New National Supervisor Certificate
+206,Renewal of National Supervisor Certificate
+207,Apply - Permission for Erection of New Lift
+208,Apply - New Lift Attendant Authorization
+209,Apply - New Lift Owners License
+210,Apply - Renewal of Lift Owners License
+211,Search - Drinking Water Schemes
+212,Cooked Mid-Day Meal Project
+213,Information on teachers' service appointment related matters
+214,Apply - SSC Examination Application
+215,Information on admission/ scholarships/ correction of mark sheets
+216,Online submission of UDISE data
+217,Apply - NOC for self-financed schools Application
+378,Apply - New Conductor Licence Application 
+219,Apply - SVSKP Application 
+220,Apply - WBSSP Application 
+221,Utkarsh Bangla
+222,Swapno Bhor
+223,Admission to Polytechnics first year- JEXPO
+224,Apply - Registration of Candidates for VOCLET
+225,Admission to ITIs- Craftsman training
+226,Admission to ITIs Apprenticeship Training
+227,All India Trade Test
+228,Search - WBTDCL Properties Booking
+229,Search - West Bengal Homestay
+230,Cancellation of Registration of approved Tour Operator
+231,Apply - Integrated City Pass
+232, Apply: Gatidhara
+260,"Payment of Property Tax (PD, FS and Outstanding)"
+388,Search - Application Status
+233,Apply - Driving Licence
+234,Apply - Renewal of Driving Licence
+235,Apply: new of conductor licence
+236,Apply: renewal of conductor license
+237,Apply: registration of vehicles/ two-wheelers
+238,Apply: addition/ alternation/modification of entry in blue book
+239,permit of contract carriage info
+240, Jaladhara scheme
+241,Info - Jai Johar Pension Scheme Application
+379,Apply - Renewal of Conductor Licence Application 
+242,Apply - Payment of Municipal & Corporation Tax
+243,Application for mutation of holding in municipality/ Municipal Corporation
+244,Search - e-Services Information of Municipal / Urban services
+245,Information for sanction of Building Plans and development permission by KMDA
+246,Apply - Sanction of Water Connection by ADDA
+247,Apply - Sanction of Water Connection  for Industrial Building in Municipal Areas
+248,Apply - Sanction of Water Connection by SJDA
+267,Info - Old Age Pension Scheme
+249,Online sanction of Water Connection by KMDA
+250,Search - SWM Demand Print
+251,Apply - Issuance of Trade License by NKDA
+252,Apply - Renewal of Trade License by NKDA
+253,Apply - Issuance of Trade Licence in Municipal Areas
+254,Conversion of provisional to Permanent Trade Licence in municipal areas
+255,Apply - Renewal of Trade License in Municipal Areas
+256,Information on issuance of new of occupancy/partial occupancy Certificate by NKDA
+257,Information of renewal of partial occupancy Certificate by NKDA
+258,Payment of property tax of KMC (for KMC area only)
+259,Fees for licence & renewal of KMC (for KMC area only)
+380,Search Status of Seed License
+261,permission and licence for outdoor advertisements
+262,Application of Birth certificate in KMC area (for KMC area only)
+263,Apply - Cooperative Home Registration
+264,Online grievance registration in KMC areas (for KMC area only)
+265,Search - Jal Dharo Jal Bharo Scheme
+266,Info - Widow Pension Scheme
+268,Information on widow pension under Jai Bangla
+270,Information on application for disability certificate
+271,Information on application for Kanyashree
+272,Apply - Rupashree Prakalpa
+273,Search - Khelasree Scheme
+274,Search - Club Grant
+275,Apply - Grievance to CMO
+276,Search - Gitanjali Scheme Information
+277,Amar Thikana
+278,Nijasree
+279,Permission for buying Mechanised bricks
+290,Search - Admit Card Download & Printing for VOCLET
+381,Download Certificate - Seed License
+280,registration of Apartment Owner Association
+281,Apply - Pay Now Rent of Flats of Government Housing
+282,Search - Working Women Hostel Information
+283,West Bengal Freeship Scheme
+285,According Academic Recognition to the Special Schools organised by NGOs
+286,Admission to Sponsored Special Schools
+287,Admission to the Welfare Homes
+288,Admit card download and printing for admission in Government ITI
+289,Search - Admit Card download & Printing for JEXPO
+301,Issuance of New Certificate of Enlistment (trade licence) and renewal of the sam
+382,Status of Application (Krishak Bandhu)
+291,Apply - Post-Matric Scholarship Under Talent Support Programme (TSP) Application 
+293,Apply - Farm Mechanisation
+294,Car Parking Facilities to Kolkata residents
+295,Apply - Merit Scholarship Examination (NMMSE)
+296,Search - Entrance Result of Admission in Government ITI
+297,Search - Entrance Result of JEXPO
+298,Search - Entrance Result of VOCLET
+299,"Extending One Time Grant (OTG) to non-sponsored, non-recognised institutions"
+300,Search - Information about Different Courses (Paschim Banga Society for Skill Development)
+302,Apply - Jaago
+303,Market stall management
+304,Apply - Micro Finance Loan Minorities of West Bengal
+305,Apply - National Talent Search Examination (NTSE)
+306,Search - NSAP under Jai Bangla
+307,Apply - Approval of Building/Plan
+308,Online building plan sanction
+309,Apply - Choice Filling of Admission in Government ITI
+310,Apply - Counselling of Choice Filling Up for JEXPO
+383,Renewal - Fertilizer License
+311,Apply - Counselling of Choice Filling Up for VOCLET
+312,Search - Counselling Result of Admission in Government ITI
+313,Search - Counselling for Result for JEXPO
+314,Search  - Counselling for Result for VOCLET
+315,Online fee submission for JEXPO
+316,Payment - Fee Submission for VOCLET
+317,Online fee submission in Government ITI
+318,Online issue of NOC by KMDA in connection with sanctioning building plan by KMC relating to EoDB
+319,Online notice for building completion certificat
+320,Apply - Provisional Admission for JEXPO
+371,Search - Application Status of Certificate of Non-Forest Land
+321,Online provisional admission for VOCLET
+322,Online registration of candidate on portal (Paschim Banga Society for Skill Development)
+323,Online registration of candidates for Admission in Government ITI
+324,Apply - Registration of Candidates for JEXPO
+325,Parks and Squares
+326,Registration - Micro Irrigation
+327,Apply - Scholarship of Students with Disabilities
+328,Search - Drainage Demand Print
+353,Registration for Covid Vaccination
+329,Survey Observation Report
+330,Swami Vivekananda Merit-cum-Means Scholarship Scheme (SVMCMS)
+331,Training Centre details (Paschim Banga Society for Skill Development)
+332,Search - Unpaid Water Supply Demand Print
+333,Khadyasathi
+334,Apply - Student Credit Card
+336,KYC for citizen  (only for KMC)
+337,Search - Print Duplicate Bill of PD (only for KMC)
+370,Apply - Certificate of Non-Forest Land
+338,Apply - Online Mutation Application (only for KMC)
+339,online application for mail address change   (only for KMC)
+340,Search - Download NOC (only for KMC)
+341,Apply - Assessment Register Printing  (only for KMC)
+342,Search - Printing of Renewal Demand (CE)  (only for KMC)
+343,Apply - New License (CE) Application  (only for KMC)
+345,online application for defaulter renewal application (CE)  (only for KMC)
+346,Apply - Defaulter Renewal Application Demand Printing (CE)
+347,Apply - Closure of Existing (CE) Application  (only for KMC)
+348,Modify - Minor Change in Existing CE  (only for KMC)
+349,dashboard for online building permit and other eodb related services  (only for KMC)
+350,Online application for water tanker
+351,Online water connection (domestic)
+352,Apply - eKYC Seeding of Aadhaar with Digital Ration Card
+376,Test Service
+354,Payment - Electricity Bill of CESC
+355,Download - Payment for Quotation Letter of New Connection WBSEDCL
+356,Search - Regenerate Receipt of WBSEDCL
+357,Payment History - WBSEDCL
+358,Search - Download of e-Ration Card
+359,Download  - Registration Certificate (e-Parimap)
+360,Download -License Certificate (e-Parimap)
+361,Apply for adding/modifying/surrendering existing Ration Card
+362,Aadhaar linking/e-KYC for flagged Ration Card
+363,Apply - Download and Print Birth Certificate
+364,Apply - Download and Print Death Certificate
+365,Apply - Conversion Application
+366,Apply - Manabik Pension Scheme (Disability Pension Scheme)
+367,Search - GRN Information
+368,Application for applying learners licence
+369,Status - Application of Learners Licence
+389,Laxmi Bhandar - Search Application Status
+392,Modify - Add member / FPS of Ration Card Holder
+393,Search - Schedule Paddy Sale
+396,Apply - Pre-Registration Form for Paschim Banga Society for Skill Development(Utkarsh Bangla)
+398,Apply - Recognition of Service Providers
+399,Apply - FPC Enrollment
+400,Apply - Group Enrollment Form other than FPC
+401,Online Application for Defaulter Renewal Application
+402,Online Admission in Government ITIs
+403,Apply - WBFDC Property Booking
+404,Search - Blood Bank Information
+405,Modify - Member Name Correction after Receiving Card (Form â C)
+406,Apply- Addition of New Member after Receiving Card (Form â A)
+407,Modify - Member Deletion after Receiving Card (Form â D)
+408,Search - Status of Application of Swasthya Sathi Card
+409,Apply - Filing of Affidavits by Citizen
+410,Online Deposit of Rent by Tenants
+411,Online Request for Certificate Copy by Citizens
+412,Apply - Certified Copy of Marriage Records
+413,Search - Marriage Record
+414,Search - Application for Objection
+415,Apply - Request to Change of Marriage Officer
+416,Search - Download Marriage Certificate
+417,Status - Application Banglashree Scheme
+418,Search - Download Certificate of Banglashree Scheme
+419,Payment - New Connection E-Pay New Connection (LT) 
+420,Search - Payment Receipt New Connection (LT)
+421,New Connection (LT) - New Connection Application Status
+422,Search - Welcome Letter New Connection (LT)
+423,Apply - Diploma in Pharmacy
+424,Apply  - Post Diploma in Petrochemical and Medical Electronics
+425,Search - Payment of Tax (MV)
+426,Apply - Transfer of Ownership
+427,Vahan - Change of Address / Hypothecation addition / Duplicate RC
+428,Apply - No Objection Certificate (NOC)
+429,Apply - Renewal of Registration (RC)
+430,Search - Print Unpaid Bills and F/S Bill 
+431,Print - Unpaid Bills of Outstanding LOI 
+432,Apply - BENFISH Property Booking
+457,Search - PMSVA Nidhi Scheme
+458,Apply - Group Loan and Fresh Loan
+459,Modify - Group Loan Application
+460,Apply - Refinance of Group Loan
+461,Search - Group Loan Status
+462,Apply - Fitness Renewal
+463,Apply - Conversion of Vehicle
+464,Apply - Alternation of Vehicle
+465,Apply - RC Particulars
+466,Vahan - Mobile Number Update
+467,Apply - Withdrawal of Application
+468,Apply - Registration of Migrant Workers
+469,Apply - New e-Requisition Form
+470,Payment - e-Payment Stamp Duty & Registration Fees
+471,Download- e-Assessment Slip & Print
+472,Application - Refund of e-Payment
+473,Search - Deed By Seller/Buyer/Party Name
+474,Search - Deed By Transacted Property Details
+475,Search - Deed by Deed Number & Query Number 
+476,Apply - Disability Certificate
+477,Apply - Distance Certificate for Students
+478,Apply - Ordinary Residencial Certificate
+479,Apply - Permission for Delayed Registration of Birth
+480,Apply - Permission for Delayed Registration of Death
+481,Apply - Redressal of RTI queries & Tracking
+482,Search Preferred Colleges & Courses
+483,Registration & Admission
+484,eChallan
+485,eDistrict Dashboard
+486,Apply - Payment of Property Tax at NKDA
+487,Apply - Assessment of Property Tax at NKDA
+488,Apply - Issuance of Record of Title (Mutation) by NKDA
+489,Apply - Grant of Fire License
+490,Apply - Renewal of Fire License
+491,Apply - Issuance of Fire Safety Recommendation
+492,Apply - Issuance of Revised Fire Safety Recommendation
+493,Apply - Registration of Association of Apartment Owners
+494,Apply - Form -B under West Bengal Apartment Ownership act 1972
+495,Apply - Form -C under West Bengal Apartment Ownership act 1972
+496,Search - Discover Your Eligible Schemes
+497,Apply - Self Certification of Fire Safety
+498,Property Tax (HMC) 
+499,Apply - Support for One Time Settlement (OTS) of NPA Accounts of PWCS
+500,Apply - One-time financial assistance to viable & potentially viable PWCS 
+501,Apply - One-time financial assistance to Individual Handloom Weavers
+502,Apply - Bhabishyat Credit Card Scheme (WBBCCS)
+503,Edit - Bhabishyat Credit Card Scheme (WBBCCS) 
+504,Search - Bhabishyat Credit Card Scheme Status (WBBCCS)
+505,Search - Bhabishyat Credit Card Scheme Status (WBBCCS)
+506,Apply - New Trade License 
+507, Apply - Renewal of Trade License
+508,Search - View & Pay Demand
+509,Search - Check License
+510,Print - Online License Reprint

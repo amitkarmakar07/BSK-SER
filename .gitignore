@@ -66,16 +66,15 @@ logs/
 # APScheduler
 *.db
 
-# Data files (keep some, ignore large ones)
-data/
-# If you want to include some data files, uncomment specific ones:
-# !data/service_master.csv
-# !data/ml_district.csv
+# Large data files only (exclude from git)
+data/ml_provision.csv
+data/new_ml_provision.csv
+data/new_ml_service_master.csv
+data/ml_citizen_master.csv
 
-# Large files
+# Large model files
 *.bin
 *.model
-*.pkl
 
 # Temporary files
 *.tmp
