@@ -85,7 +85,12 @@ def load_citizen_master():
 
 @st.cache_data
 def load_provision_data():
-    return pd.read_csv(os.path.join(DATA_DIR, "ml_provision.csv"), encoding="latin-1")
+    file_path = os.path.join(DATA_DIR, "ml_provision.csv")
+    if os.path.exists(file_path):
+        return pd.read_csv(file_path, encoding="latin-1")
+    else:
+        # Return empty DataFrame if file doesn't exist
+        return pd.DataFrame()
 
 @st.cache_data
 def get_citizen_details(citizen_id):
@@ -96,6 +101,11 @@ def get_citizen_details(citizen_id):
 @st.cache_data
 def get_services_used(citizen_id):
     provision_data = load_provision_data()
+    
+    # Handle case when provision_data is empty
+    if provision_data.empty:
+        return pd.DataFrame(columns=['customer_id', 'customer_name', 'service_id', 'service_name', 'prov_date', 'docket_no'])
+    
     df = provision_data[provision_data['customer_id'] == citizen_id]
     # Rename columns to match expected format
     df = df.rename(columns={
@@ -106,8 +116,10 @@ def get_services_used(citizen_id):
         'prov_date': 'prov_date',
         'docket_no': 'docket_no'
     })
-    df['service_id'] = df['service_id'].astype(int)
-    return df.sort_values('prov_date', ascending=False)
+    if not df.empty:
+        df['service_id'] = df['service_id'].astype(int)
+        return df.sort_values('prov_date', ascending=False)
+    return df
 
 @st.cache_data
 def preprocess_data(citizen_data, provision_data):
