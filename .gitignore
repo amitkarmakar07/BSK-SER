@@ -70,7 +70,6 @@ logs/
 data/ml_provision.csv
 data/new_ml_provision.csv
 data/new_ml_service_master.csv
-data/ml_citizen_master.csv
 
 # Large model files
 *.bin
