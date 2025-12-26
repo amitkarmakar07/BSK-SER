@@ -206,6 +206,13 @@ mode = st.radio("Select Input Mode:", ["Phone Number", "Manual Entry"])
 
 def get_citizen_ids_by_phone(phone):
     citizen_master = load_citizen_master()
+    
+    # Check if citizen master data is available
+    if citizen_master.empty:
+        st.error("⚠️ Citizen master data not available. ml_citizen_master.csv is missing from deployment.")
+        st.info("Phone number search requires the citizen master file. Please use Manual Entry mode instead.")
+        return pd.DataFrame()
+    
     # Check if citizen_phone column exists, if not try phone or mobile
     phone_columns = ['citizen_phone', 'phone', 'mobile']
     phone_col = None
