@@ -67,7 +67,6 @@ logs/
 *.db
 
 # Large data files only (exclude from git)
-data/ml_provision.csv
 data/new_ml_provision.csv
 data/new_ml_service_master.csv
 *.bak
