@@ -90,7 +90,7 @@ def load_citizen_master():
 
 @st.cache_data
 def load_provision_data():
-    # file_path = os.path.join(DATA_DIR, "ml_provision.csv")
+    file_path = os.path.join(DATA_DIR, "ml_provision.csv")
     if os.path.exists(file_path):
         return pd.read_csv(file_path, encoding="latin-1")
     else:
