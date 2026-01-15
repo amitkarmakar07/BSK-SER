@@ -4,6 +4,11 @@ import sys
 import os
 import re
 
+# ==========================================
+# --- PAGE CONFIG - MUST BE FIRST ---
+# ==========================================
+st.set_page_config(page_title="Service Recommendation for BSK Users", page_icon="🧑‍💼", layout="wide")
+
 # Set base directory as parent of frontend directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
@@ -62,6 +67,9 @@ grouped_df = pd.read_csv(os.path.join(DATA_DIR, "grouped_df.csv"), encoding="lat
 service_df = pd.read_csv(os.path.join(DATA_DIR, "services.csv"), encoding="latin-1")
 final_df = pd.read_csv(os.path.join(DATA_DIR, "final_df.csv"), encoding="latin-1")
 
+# Load service eligibility data
+services_eligibility_df = pd.read_csv(os.path.join(DATA_DIR, "services_updated22.csv"), encoding="latin-1")
+
 # Load cluster_service_map from pickle
 import pickle
 with open(os.path.join(DATA_DIR, "cluster_service_map.pkl"), "rb") as f:
@@ -70,6 +78,60 @@ with open(os.path.join(DATA_DIR, "cluster_service_map.pkl"), "rb") as f:
 # Build service_id_to_name mapping
 df_service_names = pd.read_csv(os.path.join(DATA_DIR, "service_id_with_name.csv"), encoding="latin-1")
 service_id_to_name = dict(zip(df_service_names['service_id'], df_service_names['service_name']))
+
+# Eligibility checker function
+def check_service_eligibility(service_name, user_age, user_gender, user_caste, user_religion):
+    """Check if a service is eligible for the user based on criteria in services_updated22.csv"""
+    # Find service in eligibility dataframe
+    service_row = services_eligibility_df[services_eligibility_df['service_name'] == service_name]
+    
+    if service_row.empty:
+        return True  # If not found in eligibility list, allow it
+    
+    service_row = service_row.iloc[0]
+    
+    # Check for_all column first
+    if service_row.get('for_all', 0) == 1:
+        return True  # Service is for everyone
+    
+    # Check age eligibility
+    min_age = service_row.get('min_age', 0)
+    max_age = service_row.get('max_age', 120)
+    if not pd.isna(min_age) and not pd.isna(max_age):
+        if user_age < min_age or user_age > max_age:
+            return False
+    
+    # Check caste eligibility
+    if user_caste == 'SC' and service_row.get('is_sc', 0) == 0:
+        return False
+    if user_caste == 'ST' and service_row.get('is_st', 0) == 0:
+        return False
+    if user_caste == 'OBC-A' and service_row.get('is_obc_a', 0) == 0:
+        return False
+    if user_caste == 'OBC-B' and service_row.get('is_obc_b', 0) == 0:
+        return False
+    if user_caste == 'General':
+        # For general caste, all caste flags should be 0
+        if any([service_row.get('is_sc', 0) == 1, 
+                service_row.get('is_st', 0) == 1,
+                service_row.get('is_obc_a', 0) == 1,
+                service_row.get('is_obc_b', 0) == 1]):
+            return False
+    
+    # Check gender eligibility
+    if user_gender == 'Female' and service_row.get('is_female', 0) == 0:
+        return False
+    if user_gender == 'Male' and service_row.get('is_female', 0) == 1:
+        return False  # Service is for females only
+    
+    # Check religion eligibility
+    is_user_minority = user_religion not in ['Hindu']
+    if not is_user_minority and service_row.get('is_minority', 0) == 1:
+        return False  # Hindu user but service is for minorities only
+    if is_user_minority and service_row.get('is_minority', 0) == 0:
+        return False  # Minority user but service is for Hindus only
+    
+    return True  # All checks passed
 
 # Load CSV files instead of using database
 @st.cache_data
@@ -218,9 +280,8 @@ def block_service(service, caste=None):
     return True
 
 # ==========================================
-# --- PAGE CONFIG & TITLE ---
+# --- PAGE TITLE ---
 # ==========================================
-st.set_page_config(page_title="Service Recommendation for BSK Users", page_icon="🧑‍💼", layout="wide")
 st.title("🧑‍💼 Service Recommendation for BSK Users")
 
 # ==========================================
@@ -380,6 +441,9 @@ if st.button("🚀 Generate Recommendations", type="primary"):
     # Use block from citizen if exists, otherwise from form
     final_block_id = citizen_block_id if citizen_block_id else selected_block_id
     
+    # --- COLLECT ALL RECOMMENDATIONS FROM 4 ENGINES ---
+    all_recommendations = {}  # {service_name: [sources]}
+    
     # --- RECOMMENDATIONS DISPLAY ---
     st.markdown("---")
     st.subheader("🚀 Personalized Recommendations")
@@ -387,31 +451,44 @@ if st.button("🚀 Generate Recommendations", type="primary"):
     col1, col2, col3, col4 = st.columns(4)
     
     # --- 1. District Recommendations ---
+    district_recs = []
     with col1:
         st.markdown("🏢 **District Recommendations**")
         st.caption("Popular services in user's district")
         top_services = get_top_services_for_district_from_csv(DISTRICT_CSV_PATH, district_id, top_n=5)
         top_services = [s for s in top_services if block_service(s, user_caste)][:5]
+        district_recs = top_services
         if top_services:
             st.markdown("<ul>" + "".join([f"<li>{s}</li>" for s in top_services]) + "</ul>", unsafe_allow_html=True)
+            for svc in top_services:
+                if svc not in all_recommendations:
+                    all_recommendations[svc] = []
+                all_recommendations[svc].append("District")
         else:
             st.info("No district recommendations found.")
     
     # --- 2. Block Recommendations ---
+    block_recs = []
     with col2:
         st.markdown("🏘️ **Block Recommendations**")
         st.caption("Popular services in user's block")
         if final_block_id:
             block_services = get_top_services_for_block(final_block_id, top_n=5)
             block_services = [s for s in block_services if block_service(s, user_caste)][:5]
+            block_recs = block_services
             if block_services:
                 st.markdown("<ul>" + "".join([f"<li>{s}</li>" for s in block_services]) + "</ul>", unsafe_allow_html=True)
+                for svc in block_services:
+                    if svc not in all_recommendations:
+                        all_recommendations[svc] = []
+                    all_recommendations[svc].append("Block")
             else:
                 st.info("No block recommendations found.")
         else:
             st.info("Select a block to see recommendations.")
     
     # --- 3. Demographic Recommendations ---
+    demo_recs = []
     with col3:
         st.markdown("👥 **Demographic Recommendations**")
         st.caption("Based on age, gender, caste, religion")
@@ -449,14 +526,20 @@ if st.button("🚀 Generate Recommendations", type="primary"):
             )
             
             filtered_demo = [s for s in demo_recommendations if isinstance(s, str) and block_service(s, user_caste)]
+            demo_recs = filtered_demo
             if filtered_demo:
                 st.markdown("<ul>" + "".join([f"<li>{s}</li>" for s in filtered_demo]) + "</ul>", unsafe_allow_html=True)
+                for svc in filtered_demo:
+                    if svc not in all_recommendations:
+                        all_recommendations[svc] = []
+                    all_recommendations[svc].append("Demographic")
             else:
                 st.info("No demographic recommendations found.")
         except Exception as e:
             st.error(f"Error: {e}")
     
     # --- 4. Content-based Recommendations ---
+    content_recs = []
     with col4:
         st.markdown("🔄 **Content-based Recommendations**")
         st.caption("Similar services based on history")
@@ -477,6 +560,7 @@ if st.button("🚀 Generate Recommendations", type="primary"):
                     
                     if filtered_similar:
                         found_any = True
+                        content_recs.extend(filtered_similar)
                         # Get service name
                         if not services_df.empty and sid in services_df['service_id'].values:
                             service_name = services_df[services_df['service_id'] == sid]['service_name'].iloc[0]
@@ -485,6 +569,11 @@ if st.button("🚀 Generate Recommendations", type="primary"):
                         
                         st.markdown(f"**{service_name}**")
                         st.markdown("<ul>" + "".join([f"<li>{s}</li>" for s in filtered_similar]) + "</ul>", unsafe_allow_html=True)
+                        
+                        for svc in filtered_similar:
+                            if svc not in all_recommendations:
+                                all_recommendations[svc] = []
+                            all_recommendations[svc].append("Content-based")
                 except Exception as e:
                     pass
             
@@ -492,3 +581,31 @@ if st.button("🚀 Generate Recommendations", type="primary"):
                 st.info("No similar services found.")
         else:
             st.info("No services to compare.")
+    
+    # --- CONSOLIDATED RECOMMENDATIONS WITH ELIGIBILITY FILTERING ---
+    st.markdown("---")
+    st.markdown("## 🎯 **Consolidated Eligible Recommendations**")
+    st.caption("Services recommended by all engines, filtered by your eligibility")
+    
+    if all_recommendations:
+        # Filter by eligibility
+        eligible_services = []
+        for service_name, sources in all_recommendations.items():
+            if check_service_eligibility(service_name, user_age, user_gender, user_caste, user_religion):
+                eligible_services.append(service_name)
+        
+        if eligible_services:
+            # Create dataframe for display with only service names
+            consolidated_df = pd.DataFrame({'Service Name': eligible_services})
+            
+            st.dataframe(
+                consolidated_df,
+                use_container_width=True,
+                hide_index=True
+            )
+            
+            st.success(f"✅ **{len(eligible_services)} eligible services found** out of {len(all_recommendations)} total recommendations")
+        else:
+            st.warning("⚠️ No services match your eligibility criteria from the recommendations.")
+    else:
+        st.info("No recommendations available.")

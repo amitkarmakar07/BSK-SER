@@ -1,0 +1,328 @@
+service_id,service_name,min_age,max_age,is_sc,is_st,is_obc_a,is_obc_b,is_female,is_minority,for_all
+1,Search - Application Status of Kanyasree Prakalpa,13,21,0,0,0,0,1,0,0
+2,Application for Aikyasree Scholarship,13,35,0,0,0,0,0,1,0
+4,Application for Income Certificates,18,100,0,0,0,0,0,0,1
+6,Caste Certificate,0,100,1,1,1,1,0,0,0
+10,Apply - Online Application for WBPRB,18,40,0,0,0,0,0,0,1
+17,Apply - Passport Applications,0,100,0,0,0,0,0,0,1
+22,Apply - Land Revenue (Khajna),18,100,0,0,0,0,0,0,1
+63,Apply - Bangla Shasya Bima,18,100,0,0,0,0,0,0,1
+64,Search - Bangla Shasya Bima,18,100,0,0,0,0,0,0,1
+69,Apply - Krishak Bandhu Scheme,18,60,0,0,0,0,0,0,1
+73,Apply - Fertilizer License Application,18,65,0,0,0,0,0,0,1
+74,Fertilizer license renewal/modification,18,100,0,0,0,0,0,0,1
+75,Apply - Seed License,18,100,0,0,0,0,0,0,1
+76,Renewal - Seed License,18,100,0,0,0,0,0,0,1
+77,Modify - Seed License,18,100,0,0,0,0,0,0,1
+78,Renew Insecticide License,18,100,0,0,0,0,0,0,1
+79,New Insecticide License,0,100,0,0,0,0,0,0,1
+80,Modify  Insecticide License,21,100,0,0,0,0,0,0,1
+84,Search  - Kishan Mandi Information,0,100,0,0,0,0,0,0,1
+85,Apply - Sufal Bangla Individual Enrollment Form,0,100,0,0,0,0,0,0,1
+86,Search - Price Information,0,100,0,0,0,0,0,0,1
+87,Apply - Application for Farm Produce Transport,0,100,0,0,0,0,0,0,1
+88,Search - Price Information of Daily Market,0,100,0,0,0,0,0,0,1
+89,Register - Online Marketing (Farming),18,100,0,0,0,0,0,0,1
+90,Apply e-permit (agrimarket),18,100,0,0,0,0,0,0,1
+91,Search - Diary Scheme Information,18,100,0,0,0,0,0,0,1
+118,Apply - Excise Crime Reporting - Citizen,0,100,0,0,0,0,0,0,1
+92,Search - Livestock Scheme,18,100,0,0,0,0,0,0,1
+94,Search - Sabuj Sathi Scheme Information,13,22,0,0,0,0,0,0,1
+95,Search - Sikshashree Information,8,14,1,1,0,0,0,0,0
+96,Search - Taposali Bandhu Pension Scheme,60,100,1,0,0,0,0,0,0
+97,Apply - Consumer Grievance,0,100,0,0,0,0,0,0,1
+98,Search - Consumer Rights Information,0,100,0,0,0,0,0,0,1
+99,Register - For e-Parimap ,18,100,0,0,0,0,0,0,1
+100,Apply - License for e-Parimap,18,100,0,0,0,0,0,0,1
+101,Search - Right to Public Services Information,0,100,0,0,0,0,0,0,1
+102,Search - Cooperative information,0,100,0,0,0,0,0,0,1
+105,Register - Cooperative Society,18,100,0,0,0,0,0,0,1
+106,Apply - Change of name in Cooperative Society,18,100,0,0,0,0,0,0,1
+107,Search - Cooperative Society Finance Rules,0,100,0,0,0,0,0,0,1
+108,"Apply - Special Compassionate Appointment (Covid-19) Scheme, 2020",14,100,0,0,0,0,0,0,1
+109,Apply - PSC Job Application,16,100,0,0,0,0,0,0,1
+110,Deed e-Registration,0,100,0,0,0,0,0,0,1
+119,Payment - Tax or Fees,18,100,0,0,0,0,0,0,1
+111,Deed - Certified Copy,18,100,0,0,0,0,0,0,1
+112,Valuation - Stamp Duty Information,0,100,0,0,0,0,0,0,1
+113,Apply - New Excise License,21,100,0,0,0,0,0,0,1
+114,Renewal - Excise License,21,100,0,0,0,0,0,0,1
+115,Payment - Excise Duty Fee,21,100,0,0,0,0,0,0,1
+116,Apply - Temporary Bar License Application,21,100,0,0,0,0,0,0,1
+117,Register - Retail Liquor Outlet,21,100,0,0,0,0,0,0,1
+120,Apply - Renewal of Fire Safety Certificate,0,100,0,0,0,0,0,0,1
+121,Apply - Issuance of Fire Safety Certificate,0,100,0,0,0,0,0,0,1
+124,Apply - Farmer Registration Paddy Sale,18,100,0,0,0,0,0,0,1
+125,Search  - Payment Status of Paddy Sold,0,100,0,0,0,0,0,0,1
+126,Apply - New Digital Ration Card,5,100,0,0,0,0,0,0,1
+127,Search - Application Status of Digital Ration Card Application,5,100,0,0,0,0,0,0,1
+128,Apply - Aadhaar & Mobile Link with Digital Ration Card,18,100,0,0,0,0,0,0,1
+130,Search - Food Processing & Horticulture Schemes Information,0,100,0,0,0,0,0,0,1
+131,Apply for Birth & Death Certificate,0,100,0,0,0,0,0,0,1
+137,Apply - Swasthya Sathi Enrolment Certificate New Registration (Form – B),0,100,0,0,0,0,0,0,1
+138,Apply - OPD Registration,0,100,0,0,0,0,0,0,1
+139,Search - COVID Patient Information,0,100,0,0,0,0,0,0,1
+140,Search - Blood Test Report,0,100,0,0,0,0,0,0,1
+146,Apply - Swami Vivekananda Scholarship,15,35,1,1,1,1,0,0,1
+151,Apply - Local Residence (Domicile) Certificate,15,100,0,0,0,0,0,0,1
+152,Apply - Refinance of Term Loan,21,100,0,0,0,0,0,0,1
+384,Search - Fertilizer License Status ,0,100,0,0,0,0,0,0,1
+153,Search - Transfer Case of Arms License Information,18,100,0,0,0,0,0,0,1
+154,Apply - Gorkha Certificate,15,100,0,0,0,0,0,0,1
+155,Apply - Submission of Form for Electoral Roll,18,100,0,0,0,0,0,0,1
+156,Apply - Verification of Electoral Roll Online,18,100,0,0,0,0,0,0,1
+157,Search - Firecracker License Information,21,100,0,0,0,0,0,0,1
+158, Search - Term Loan Status,21,100,0,0,0,0,0,0,1
+159,Apply - Lok Prasar Scheme,18,100,0,0,0,0,0,0,1
+160,Search - Agriculture & Irrigation Schemes,0,100,0,0,0,0,0,0,1
+171,Apply - Map Service,0,100,0,0,0,0,0,0,1
+172,Search - Property Information,0,100,0,0,0,0,0,0,1
+161,Apply - Building and other Construction Workers Pension Scheme,18,60,0,0,0,0,0,0,1
+162,Search - Subscription of Building and other Construction Workers Pension Scheme Information,18,60,0,0,0,0,0,0,1
+163,Search - Registration of Transport Workers Pension Scheme Information,18,60,0,0,0,0,0,0,1
+164,Apply - Samajik Suraksha Yojana Application ,18,60,0,0,0,0,0,0,1
+165,Apply - Yuvashree Scheme Application ,18,45,0,0,0,0,0,0,1
+166,Apply - Unemployment Allowance Application ,18,60,0,0,0,0,0,0,1
+167,"Apply - Shops & Establishment, Register - New/ Renewal of Certificate for Registration",18,100,0,0,0,0,0,0,1
+168,Apply - Mutation Application,18,100,0,0,0,0,0,0,1
+169,Apply - ROR Application ,18,100,0,0,0,0,0,0,1
+170,Apply - Plot Information,18,100,0,0,0,0,0,0,1
+385,Download - Certificate of Fertilizer License,18,100,0,0,0,0,0,0,1
+173,Apply - Marriage Certificate ,21,100,0,0,0,0,0,0,1
+174,Search - Mass Education & Library Related Schemes Information,0,60,0,0,0,0,0,0,1
+175,Apply - Karma Sathi Prakalpa Scheme,18,50,0,0,0,0,0,0,1
+176,Apply - Banglashree Scheme,18,100,0,0,0,0,0,0,1
+178,Apply - Educational Loan Application,0,18,0,0,0,0,0,0,1
+179,Apply - Fresh Term Loan Application,18,50,0,0,0,0,0,0,1
+180,Apply - SHG Loan Application,18,50,0,0,0,0,0,0,1
+182,Apply - Construction of Boundary Wall,18,100,0,0,0,0,0,1,1
+386,Search - Insecticide License Status ,0,100,0,0,0,0,0,0,1
+183,Modify - Term Loan Application,18,100,0,0,0,0,0,0,1
+184,Search - Bangla Awas Yojana,18,100,0,0,0,0,0,0,1
+185,Search - Anandadhara Scheme,18,100,0,0,0,0,0,0,1
+186,Search - Guideline & View Job Card Detail,18,60,0,0,0,0,0,0,1
+187,Search- Nirmal Bangla scheme,18,100,0,0,0,0,0,0,1
+188,Search- Samabyathi Scheme Information,18,100,0,0,0,0,0,0,1
+192,Application for EWS Certificates,0,100,0,0,0,0,0,0,1
+195,Apply - Online Trade Registration,18,100,0,0,0,0,0,0,1
+196,Apply - Citizens Grievance Redressal,0,100,0,0,0,0,0,0,1
+198,Apply - New Electricity Connection of LT/HT Application,18,100,0,0,0,0,0,0,1
+199,Apply - Payment of WBSEDCL Electricity Bill,18,100,0,0,0,0,0,0,1
+200,Apply - New Workman Permit,18,100,0,0,0,0,0,0,1
+201,Apply - New Electrical Supervisor License,23,100,0,0,0,0,0,0,1
+202,Apply - Renewal of Electrical Supervisor License,23,70,0,0,0,0,0,0,1
+203,Apply - Contractors License,18,100,0,0,0,0,0,0,1
+204,Apply - Renewal of Workman Permit,18,65,0,0,0,0,0,0,1
+218,Search - Muktidhara Scheme Information ,0,100,0,0,0,0,0,0,1
+387,Download - Certificate of Insecticide License,18,100,0,0,0,0,0,0,1
+207,Apply - Permission for Erection of New Lift,18,100,0,0,0,0,0,0,1
+208,Apply - New Lift Attendant Authorization,19,100,0,0,0,0,0,0,1
+209,Apply - New Lift Owners License,19,100,0,0,0,0,0,0,1
+210,Apply - Renewal of Lift Owners License,19,100,0,0,0,0,0,0,1
+211,Search - Drinking Water Schemes,0,100,0,0,0,0,0,0,1
+214,Apply - SSC Examination Application,18,40,0,0,0,0,0,0,1
+217,Apply - NOC for self-financed schools Application,18,100,0,0,0,0,0,0,1
+378,Apply - New Conductor Licence Application ,18,100,0,0,0,0,0,0,1
+219,Apply - SVSKP Application ,18,45,0,0,0,0,0,0,1
+220,Apply - WBSSP Application ,18,100,0,0,0,0,0,0,1
+224,Apply - Registration of Candidates for VOCLET,16,35,0,0,0,0,0,0,1
+228,Search - WBTDCL Properties Booking,15,100,0,0,0,0,0,0,1
+229,Search - West Bengal Homestay,15,100,0,0,0,0,0,0,1
+231,Apply - Integrated City Pass,18,100,0,0,0,0,0,0,1
+388,Search - Application Status,0,100,0,0,0,0,1,0,1
+233,Apply - Driving Licence,18,60,0,0,0,0,0,0,1
+234,Apply - Renewal of Driving Licence,18,60,0,0,0,0,0,0,1
+241,Info - Jai Johar Pension Scheme Application,60,100,0,1,0,0,0,0,0
+379,Apply - Renewal of Conductor Licence Application ,18,60,0,0,0,0,0,0,1
+242,Apply - Payment of Municipal & Corporation Tax,18,100,0,0,0,0,0,0,1
+243,Application for mutation of holding in municipality/ Municipal Corporation,18,100,0,0,0,0,0,0,1
+244,Search - e-Services Information of Municipal / Urban services,0,100,0,0,0,0,0,0,1
+246,Apply - Sanction of Water Connection by ADDA,18,100,0,0,0,0,0,0,1
+247,Apply - Sanction of Water Connection  for Industrial Building in Municipal Areas,18,100,0,0,0,0,0,0,1
+248,Apply - Sanction of Water Connection by SJDA,18,100,0,0,0,0,0,0,1
+267,Info - Old Age Pension Scheme,60,100,0,0,0,0,0,0,1
+250,Search - SWM Demand Print,0,100,0,0,0,0,0,0,1
+251,Apply - Issuance of Trade License by NKDA,18,100,0,0,0,0,0,0,1
+252,Apply - Renewal of Trade License by NKDA,18,100,0,0,0,0,0,0,1
+253,Apply - Issuance of Trade Licence in Municipal Areas,18,100,0,0,0,0,0,0,1
+255,Apply - Renewal of Trade License in Municipal Areas,18,100,0,0,0,0,0,0,1
+380,Search Status of Seed License,0,100,0,0,0,0,0,0,1
+263,Apply - Cooperative Home Registration,18,100,0,0,0,0,0,0,1
+265,Search - Jal Dharo Jal Bharo Scheme,0,100,0,0,0,0,0,0,1
+266,Info - Widow Pension Scheme,21,100,0,0,0,0,0,0,1
+272,Apply - Rupashree Prakalpa,18,100,0,0,0,0,1,0,0
+273,Search - Khelasree Scheme,18,100,0,0,0,0,0,0,1
+274,Search - Club Grant,18,100,0,0,0,0,0,0,1
+275,Apply - Grievance to CMO,0,100,0,0,0,0,0,0,1
+276,Search - Gitanjali Scheme Information,0,100,0,0,0,0,0,0,1
+290,Search - Admit Card Download & Printing for VOCLET,16,25,0,0,0,0,0,0,1
+381,Download Certificate - Seed License,18,100,0,0,0,0,0,0,1
+281,Apply - Pay Now Rent of Flats of Government Housing,18,100,0,0,0,0,0,0,1
+282,Search - Working Women Hostel Information,18,60,0,0,0,0,1,0,1
+289,Search - Admit Card download & Printing for JEXPO,15,25,0,0,0,0,0,0,1
+382,Status of Application (Krishak Bandhu),18,100,0,0,0,0,0,0,1
+291,Apply - Post-Matric Scholarship Under Talent Support Programme (TSP) Application ,15,35,0,0,0,0,0,1,0
+293,Apply - Farm Mechanisation,18,100,0,0,0,0,0,0,1
+295,Apply - Merit Scholarship Examination (NMMSE),13,35,0,0,0,0,0,0,1
+296,Search - Entrance Result of Admission in Government ITI,15,35,0,0,0,0,0,0,1
+297,Search - Entrance Result of JEXPO,15,35,0,0,0,0,0,0,1
+298,Search - Entrance Result of VOCLET,15,35,0,0,0,0,0,0,1
+300,Search - Information about Different Courses (Paschim Banga Society for Skill Development),14,44,0,0,0,0,0,0,1
+302,Apply - Jaago,18,100,0,0,0,0,1,0,1
+304,Apply - Micro Finance Loan Minorities of West Bengal,18,50,0,0,0,0,0,1,1
+305,Apply - National Talent Search Examination (NTSE),14,18,0,0,0,0,0,0,1
+306,Search - NSAP under Jai Bangla,18,100,0,0,0,0,0,0,1
+309,Apply - Choice Filling of Admission in Government ITI,15,25,0,0,0,0,0,0,1
+310,Apply - Counselling of Choice Filling Up for JEXPO,15,25,0,0,0,0,0,0,1
+383,Renewal - Fertilizer License,18,65,0,0,0,0,0,0,1
+311,Apply - Counselling of Choice Filling Up for VOCLET,15,25,0,0,0,0,0,0,1
+312,Search - Counselling Result of Admission in Government ITI,15,25,0,0,0,0,0,0,1
+313,Search - Counselling for Result for JEXPO,15,25,0,0,0,0,0,0,1
+314,Search  - Counselling for Result for VOCLET,15,25,0,0,0,0,0,0,1
+315,Online fee submission for JEXPO,15,25,0,0,0,0,0,0,1
+316,Payment - Fee Submission for VOCLET,15,25,0,0,0,0,0,0,1
+317,Online fee submission in Government ITI,15,25,0,0,0,0,0,0,1
+320,Apply - Provisional Admission for JEXPO,15,25,0,0,0,0,0,0,1
+371,Search - Application Status of Certificate of Non-Forest Land,18,100,0,0,0,0,0,0,1
+321,Online provisional admission for VOCLET,15,25,0,0,0,0,0,0,1
+324,Apply - Registration of Candidates for JEXPO,15,44,0,0,0,0,0,0,1
+326,Registration - Micro Irrigation,18,100,0,0,0,0,0,0,1
+327,Apply - Scholarship of Students with Disabilities,13,35,0,0,0,0,0,0,1
+328,Search - Drainage Demand Print,18,100,0,0,0,0,0,0,1
+331,Training Centre details (Paschim Banga Society for Skill Development),14,44,0,0,0,0,0,0,1
+332,Search - Unpaid Water Supply Demand Print,18,100,0,0,0,0,0,0,1
+334,Apply - Student Credit Card,15,40,0,0,0,0,0,0,1
+336,KYC for citizen  (only for KMC),18,100,0,0,0,0,0,0,1
+337,Search - Print Duplicate Bill of PD (only for KMC),18,100,0,0,0,0,0,0,1
+370,Apply - Certificate of Non-Forest Land,18,100,0,0,0,0,0,0,1
+338,Apply - Online Mutation Application (only for KMC),18,100,0,0,0,0,0,0,1
+339,online application for mail address change   (only for KMC),18,100,0,0,0,0,0,0,1
+340,Search - Download NOC (only for KMC),18,100,0,0,0,0,0,0,1
+341,Apply - Assessment Register Printing  (only for KMC),18,100,0,0,0,0,0,0,1
+342,Search - Printing of Renewal Demand (CE)  (only for KMC),18,100,0,0,0,0,0,0,1
+343,Apply - New License (CE) Application  (only for KMC),18,100,0,0,0,0,0,0,1
+346,Apply - Defaulter Renewal Application Demand Printing (CE),18,100,0,0,0,0,0,0,1
+347,Apply - Closure of Existing (CE) Application  (only for KMC),18,100,0,0,0,0,0,0,1
+348,Modify - Minor Change in Existing CE  (only for KMC),18,100,0,0,0,0,0,0,1
+349,dashboard for online building permit and other eodb related services  (only for KMC),18,100,0,0,0,0,0,0,1
+350,Online application for water tanker,18,100,0,0,0,0,0,0,1
+351,Online water connection (domestic),18,100,0,0,0,0,0,0,1
+352,Apply - eKYC Seeding of Aadhaar with Digital Ration Card,18,100,0,0,0,0,0,0,1
+354,Payment - Electricity Bill of CESC,18,100,0,0,0,0,0,0,1
+355,Download - Payment for Quotation Letter of New Connection WBSEDCL,18,100,0,0,0,0,0,0,1
+356,Search - Regenerate Receipt of WBSEDCL,18,100,0,0,0,0,0,0,1
+357,Payment History - WBSEDCL,18,100,0,0,0,0,0,0,1
+358,Search - Download of e-Ration Card,0,100,0,0,0,0,0,0,1
+359,Download  - Registration Certificate (e-Parimap),18,100,0,0,0,0,0,0,1
+360,Download -License Certificate (e-Parimap),18,100,0,0,0,0,0,0,1
+363,Apply - Download and Print Birth Certificate,0,100,0,0,0,0,0,0,1
+364,Apply - Download and Print Death Certificate,0,100,0,0,0,0,0,0,1
+365,Apply - Conversion Application,18,100,0,0,0,0,0,0,1
+366,Apply - Manabik Pension Scheme (Disability Pension Scheme),60,100,0,0,0,0,0,0,1
+367,Search - GRN Information,0,100,0,0,0,0,0,0,1
+368,Application for applying learners licence,18,60,0,0,0,0,0,0,1
+369,Status - Application of Learners Licence,18,60,0,0,0,0,0,0,1
+392,Modify - Add member / FPS of Ration Card Holder,18,100,0,0,0,0,0,0,1
+393,Search - Schedule Paddy Sale,0,100,0,0,0,0,0,0,1
+396,Apply - Pre-Registration Form for Paschim Banga Society for Skill Development(Utkarsh Bangla),15,40,0,0,0,0,0,0,1
+398,Apply - Recognition of Service Providers,18,100,0,0,0,0,0,0,1
+399,Apply - FPC Enrollment,18,100,0,0,0,0,0,0,1
+400,Apply - Group Enrollment Form other than FPC,18,100,0,0,0,0,0,0,1
+401,Online Application for Defaulter Renewal Application,18,100,0,0,0,0,0,0,1
+402,Online Admission in Government ITIs,15,25,0,0,0,0,0,0,1
+403,Apply - WBFDC Property Booking,18,100,0,0,0,0,0,0,1
+404,Search - Blood Bank Information,0,100,0,0,0,0,0,0,1
+408,Search - Status of Application of Swasthya Sathi Card,0,100,0,0,0,0,0,0,1
+409,Apply - Filing of Affidavits by Citizen,18,100,0,0,0,0,0,0,1
+410,Online Deposit of Rent by Tenants,18,100,0,0,0,0,0,0,1
+411,Online Request for Certificate Copy by Citizens,0,100,0,0,0,0,0,0,1
+412,Apply - Certified Copy of Marriage Records,21,100,0,0,0,0,0,0,1
+413,Search - Marriage Record,21,100,0,0,0,0,0,0,1
+414,Search - Application for Objection,21,100,0,0,0,0,0,0,1
+415,Apply - Request to Change of Marriage Officer,21,100,0,0,0,0,0,0,1
+416,Search - Download Marriage Certificate,21,100,0,0,0,0,0,0,1
+417,Status - Application Banglashree Scheme,18,100,0,0,0,0,0,0,1
+418,Search - Download Certificate of Banglashree Scheme,18,100,0,0,0,0,0,0,1
+419,Payment - New Connection E-Pay New Connection (LT) ,18,100,0,0,0,0,0,0,1
+420,Search - Payment Receipt New Connection (LT),18,100,0,0,0,0,0,0,1
+421,New Connection (LT) - New Connection Application Status,18,100,0,0,0,0,0,0,1
+422,Search - Welcome Letter New Connection (LT),18,100,0,0,0,0,0,0,1
+423,Apply - Diploma in Pharmacy,15,25,0,0,0,0,0,0,1
+424,Apply  - Post Diploma in Petrochemical and Medical Electronics,18,30,0,0,0,0,0,0,1
+425,Search - Payment of Tax (MV),18,100,0,0,0,0,0,0,1
+426,Apply - Transfer of Ownership,18,100,0,0,0,0,0,0,1
+427,Vahan - Change of Address / Hypothecation addition / Duplicate RC,18,100,0,0,0,0,0,0,1
+428,Apply - No Objection Certificate (NOC),18,100,0,0,0,0,0,0,1
+429,Apply - Renewal of Registration (RC),18,100,0,0,0,0,0,0,1
+430,Search - Print Unpaid Bills and F/S Bill ,18,100,0,0,0,0,0,0,1
+431,Print - Unpaid Bills of Outstanding LOI ,18,100,0,0,0,0,0,0,1
+432,Apply - BENFISH Property Booking,18,100,0,0,0,0,0,0,1
+457,Search - PMSVA Nidhi Scheme,18,100,0,0,0,0,0,0,1
+458,Apply - Group Loan and Fresh Loan,18,100,0,0,0,0,0,0,1
+459,Modify - Group Loan Application,18,100,0,0,0,0,0,0,1
+460,Apply - Refinance of Group Loan,18,100,0,0,0,0,0,0,1
+461,Search - Group Loan Status,0,100,0,0,0,0,0,0,1
+462,Apply - Fitness Renewal,18,100,0,0,0,0,0,0,1
+463,Apply - Conversion of Vehicle,18,100,0,0,0,0,0,0,1
+464,Apply - Alternation of Vehicle,18,100,0,0,0,0,0,0,1
+465,Apply - RC Particulars,18,100,0,0,0,0,0,0,1
+466,Vahan - Mobile Number Update,18,100,0,0,0,0,0,0,1
+467,Apply - Withdrawal of Application,18,100,0,0,0,0,0,0,1
+468,Apply - Registration of Migrant Workers,18,60,0,0,0,0,0,0,1
+469,Apply - New e-Requisition Form,18,60,0,0,0,0,0,0,1
+470,Payment - e-Payment Stamp Duty & Registration Fees,18,100,0,0,0,0,0,0,1
+471,Download- e-Assessment Slip & Print,18,100,0,0,0,0,0,0,1
+472,Application - Refund of e-Payment,18,100,0,0,0,0,0,0,1
+473,Search - Deed By Seller/Buyer/Party Name,18,100,0,0,0,0,0,0,1
+474,Search - Deed By Transacted Property Details,18,100,0,0,0,0,0,0,1
+475,Search - Deed by Deed Number & Query Number ,18,100,0,0,0,0,0,0,1
+476,Apply - Disability Certificate,0,100,0,0,0,0,0,0,1
+477,Apply - Distance Certificate for Students,0,35,0,0,0,0,0,0,1
+478,Apply - Ordinary Residencial Certificate,0,100,0,0,0,0,0,0,1
+479,Apply - Permission for Delayed Registration of Birth,18,100,0,0,0,0,0,0,1
+480,Apply - Permission for Delayed Registration of Death,18,100,0,0,0,0,0,0,1
+481,Apply - Redressal of RTI queries & Tracking,18,100,0,0,0,0,0,0,1
+482,Search Preferred Colleges & Courses,15,40,0,0,0,0,0,0,1
+483,Registration & Admission,15,40,0,0,0,0,0,0,1
+484,eChallan,18,100,0,0,0,0,0,0,1
+485,eDistrict Dashboard,18,100,0,0,0,0,0,0,1
+486,Apply - Payment of Property Tax at NKDA,18,100,0,0,0,0,0,0,1
+487,Apply - Assessment of Property Tax at NKDA,18,100,0,0,0,0,0,0,1
+488,Apply - Issuance of Record of Title (Mutation) by NKDA,18,100,0,0,0,0,0,0,1
+489,Apply - Grant of Fire License,18,100,0,0,0,0,0,0,1
+490,Apply - Renewal of Fire License,18,100,0,0,0,0,0,0,1
+491,Apply - Issuance of Fire Safety Recommendation,0,100,0,0,0,0,0,0,1
+492,Apply - Issuance of Revised Fire Safety Recommendation,0,100,0,0,0,0,0,0,1
+493,Apply - Registration of Association of Apartment Owners,18,100,0,0,0,0,0,0,1
+494,Apply - Form -B under West Bengal Apartment Ownership act 1972,18,100,0,0,0,0,0,0,1
+495,Apply - Form -C under West Bengal Apartment Ownership act 1972,18,100,0,0,0,0,0,0,1
+496,Search - Discover Your Eligible Schemes,0,100,0,0,0,0,0,0,1
+497,Apply - Self Certification of Fire Safety,0,100,0,0,0,0,0,0,1
+498,Property Tax (HMC) ,18,100,0,0,0,0,0,0,1
+499,Apply - Support for One Time Settlement (OTS) of NPA Accounts of PWCS,18,100,0,0,0,0,0,0,1
+500,Apply - One-time financial assistance to viable & potentially viable PWCS ,18,100,0,0,0,0,0,0,1
+501,Apply - One-time financial assistance to Individual Handloom Weavers,18,100,0,0,0,0,0,0,1
+502,Apply - Bhabishyat Credit Card Scheme (WBBCCS),18,100,0,0,0,0,0,0,1
+503,Edit - Bhabishyat Credit Card Scheme (WBBCCS) ,18,100,0,0,0,0,0,0,1
+505,Search - Bhabishyat Credit Card Scheme Status (WBBCCS),18,100,0,0,0,0,0,0,1
+506,Apply - New Trade License ,18,100,0,0,0,0,0,0,1
+507, Apply - Renewal of Trade License,18,100,0,0,0,0,0,0,1
+508,Search - View & Pay Demand,0,100,0,0,0,0,0,0,1
+509,Search - Check License,0,100,0,0,0,0,0,0,1
+510,Print - Online License Reprint,0,100,0,0,0,0,0,0,1
+513,Apply - Duplicate Driving License,18,100,0,0,0,0,0,0,1
+512,Apply - Change of Address in Driving License,18,100,0,0,0,0,0,0,1
+143,Registration - Shishu Sathi,0,18,0,0,0,0,0,0,1
+514,Apply - Hypothecation Termination of a Vehicle,18,100,0,0,0,0,0,0,1
+515,Apply - Duplication Certificate of Fitness,18,100,0,0,0,0,0,0,1
+516,Apply - GP Certificate,0,100,0,0,0,0,0,0,1
+517,Apply - Modification of Assessment of Property Tax,18,100,0,0,0,0,0,0,1
+518,Apply - Permit New Tube Well Under KMC (Form 1C) ,18,100,0,0,0,0,0,0,1
+519,Apply - Issuance of No Dues Certificate on Water Charges at SJDA,18,100,0,0,0,0,0,0,1
+520,Apply - Renewal of Water Connection at SJDA,18,100,0,0,0,0,0,0,1
+521,Apply - Doctor Appointment at GP Dispensaries,0,100,0,0,0,0,0,0,1
+522,Apply - TOTO Enrollment,18,60,0,0,0,0,0,0,1
+523,Apply - Supply of yarn to PWCS at subsidized rate,18,100,0,0,0,0,0,0,1
+524,Apply - Supply of Roving to Khadi Societies at subsidized rate,18,100,0,0,0,0,0,0,1
+525, Apply - Supply of Yarn to individual weavers and subsequent financial assistance,18,100,0,0,0,0,0,0,1
+526,Apply - Jai Johar Pension Scheme ,60,100,0,1,0,0,0,0,0
