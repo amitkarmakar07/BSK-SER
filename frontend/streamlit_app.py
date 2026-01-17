@@ -4,6 +4,11 @@ import sys
 import os
 import re
 
+# ==========================================
+# --- PAGE CONFIG - MUST BE FIRST ---
+# ==========================================
+st.set_page_config(page_title="Service Recommendation for BSK Users", page_icon="🧑‍💼", layout="wide")
+
 # Set base directory as parent of frontend directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
@@ -22,11 +27,9 @@ def load_under_18_services():
     try:
         csv_path = os.path.join(DATA_DIR, "under18_top_services.csv")
         df = pd.read_csv(csv_path, encoding='latin-1')
-        # Handle CSVs with or without service_id column
         if 'service_id' in df.columns:
             df = df[['service_id', 'service_name']].drop_duplicates()
         else:
-            # CSV only has service_name, create a simple DataFrame
             df = df[['service_name']].drop_duplicates()
         return df
     except Exception as e:
@@ -47,11 +50,7 @@ def filter_recommendations_for_under_18(recommendations, under_18_services_df):
     """Filter recommendations to only include services eligible for under-18 users."""
     if under_18_services_df.empty:
         return recommendations
-    
-    # Get list of eligible service names (normalized)
     eligible_service_names = set(under_18_services_df['service_name'].apply(normalize_service_name))
-    
-    # Filter recommendations - only list type for Streamlit
     if isinstance(recommendations, list):
         filtered = []
         for rec in recommendations:
@@ -60,7 +59,6 @@ def filter_recommendations_for_under_18(recommendations, under_18_services_df):
                 if rec_normalized in eligible_service_names:
                     filtered.append(rec)
         return filtered
-    
     return recommendations
 
 
@@ -68,6 +66,9 @@ def filter_recommendations_for_under_18(recommendations, under_18_services_df):
 grouped_df = pd.read_csv(os.path.join(DATA_DIR, "grouped_df.csv"), encoding="latin-1")
 service_df = pd.read_csv(os.path.join(DATA_DIR, "services.csv"), encoding="latin-1")
 final_df = pd.read_csv(os.path.join(DATA_DIR, "final_df.csv"), encoding="latin-1")
+
+# Load service eligibility data
+services_eligibility_df = pd.read_csv(os.path.join(DATA_DIR, "services_updated22.csv"), encoding="latin-1")
 
 # Load cluster_service_map from pickle
 import pickle
@@ -78,6 +79,60 @@ with open(os.path.join(DATA_DIR, "cluster_service_map.pkl"), "rb") as f:
 df_service_names = pd.read_csv(os.path.join(DATA_DIR, "service_id_with_name.csv"), encoding="latin-1")
 service_id_to_name = dict(zip(df_service_names['service_id'], df_service_names['service_name']))
 
+# Eligibility checker function
+def check_service_eligibility(service_name, user_age, user_gender, user_caste, user_religion):
+    """Check if a service is eligible for the user based on criteria in services_updated22.csv"""
+    # Find service in eligibility dataframe
+    service_row = services_eligibility_df[services_eligibility_df['service_name'] == service_name]
+    
+    if service_row.empty:
+        return True  # If not found in eligibility list, allow it
+    
+    service_row = service_row.iloc[0]
+    
+    # Check for_all column first
+    if service_row.get('for_all', 0) == 1:
+        return True  # Service is for everyone
+    
+    # Check age eligibility
+    min_age = service_row.get('min_age', 0)
+    max_age = service_row.get('max_age', 120)
+    if not pd.isna(min_age) and not pd.isna(max_age):
+        if user_age < min_age or user_age > max_age:
+            return False
+    
+    # Check caste eligibility
+    if user_caste == 'SC' and service_row.get('is_sc', 0) == 0:
+        return False
+    if user_caste == 'ST' and service_row.get('is_st', 0) == 0:
+        return False
+    if user_caste == 'OBC-A' and service_row.get('is_obc_a', 0) == 0:
+        return False
+    if user_caste == 'OBC-B' and service_row.get('is_obc_b', 0) == 0:
+        return False
+    if user_caste == 'General':
+        # For general caste, all caste flags should be 0
+        if any([service_row.get('is_sc', 0) == 1, 
+                service_row.get('is_st', 0) == 1,
+                service_row.get('is_obc_a', 0) == 1,
+                service_row.get('is_obc_b', 0) == 1]):
+            return False
+    
+    # Check gender eligibility
+    if user_gender == 'Female' and service_row.get('is_female', 0) == 0:
+        return False
+    if user_gender == 'Male' and service_row.get('is_female', 0) == 1:
+        return False  # Service is for females only
+    
+    # Check religion eligibility
+    is_user_minority = user_religion not in ['Hindu']
+    if not is_user_minority and service_row.get('is_minority', 0) == 1:
+        return False  # Hindu user but service is for minorities only
+    if is_user_minority and service_row.get('is_minority', 0) == 0:
+        return False  # Minority user but service is for Hindus only
+    
+    return True  # All checks passed
+
 # Load CSV files instead of using database
 @st.cache_data
 def load_citizen_master():
@@ -85,7 +140,6 @@ def load_citizen_master():
     if os.path.exists(file_path):
         return pd.read_csv(file_path, encoding="latin-1")
     else:
-        # Return empty DataFrame if file doesn't exist
         return pd.DataFrame()
 
 @st.cache_data
@@ -94,30 +148,23 @@ def load_provision_data():
     if os.path.exists(file_path):
         return pd.read_csv(file_path, encoding="latin-1")
     else:
-        # Return empty DataFrame if file doesn't exist
         return pd.DataFrame()
 
 @st.cache_data
 def get_citizen_details(citizen_id):
     citizen_master = load_citizen_master()
-    
-    # Handle case when citizen_master is empty
     if citizen_master.empty:
         return pd.DataFrame()
-    
     df = citizen_master[citizen_master['citizen_id'] == citizen_id]
     return df
 
 @st.cache_data
 def get_services_used(citizen_id):
     provision_data = load_provision_data()
-    
-    # Handle case when provision_data is empty
     if provision_data.empty:
         return pd.DataFrame(columns=['customer_id', 'customer_name', 'service_id', 'service_name', 'prov_date', 'docket_no'])
     
     df = provision_data[provision_data['customer_id'] == citizen_id]
-    # Rename columns to match expected format
     df = df.rename(columns={
         'customer_id': 'customer_id',
         'customer_name': 'customer_name', 
@@ -198,24 +245,17 @@ def preprocess_data(citizen_data, provision_data):
 
 DISTRICT_CSV_PATH = os.path.join(DATA_DIR, "district_top_services.csv")
 
+st.set_page_config(page_title="Service Recommendation for BSK Users", page_icon="🧑‍💼", layout="wide")
+st.title("🧑‍💼 Service Recommendation for BSK Users")
 
-# ==========================================
-# --- UI & APP LOGIC START ---
-# ==========================================
 
-st.set_page_config(
-    page_title="Bangla Sahayata Kendra Service Recommendation",
-    page_icon="🏛️",
-    layout="wide",
-)
+mode = st.radio("Select Input Mode:", ["Phone Number", "Manual Entry"])
 
-st.title("Bangla Sahayata Kendra Service Recommendation")
-
-# --- Helper Function for Phone Search ---
 def get_citizen_ids_by_phone(phone):
     citizen_master = load_citizen_master()
     if citizen_master.empty:
-        st.error("⚠️ Citizen master data not available.")
+        st.error("⚠️ Citizen master data not available. ml_citizen_master.csv is missing from deployment.")
+        st.info("Phone number search requires the citizen master file. Please use Manual Entry mode instead.")
         return pd.DataFrame()
     
     phone_columns = ['citizen_phone', 'phone', 'mobile']
@@ -226,6 +266,7 @@ def get_citizen_ids_by_phone(phone):
             break
     
     if phone_col is None:
+        st.error("No phone number column found in citizen master data")
         return pd.DataFrame()
     
     try:
@@ -235,330 +276,374 @@ def get_citizen_ids_by_phone(phone):
         df = citizen_master[citizen_master[phone_col].astype(str) == phone]
     
     if df.empty:
-        st.warning(f"No registered citizen found for: {phone}")
+        st.warning(f"No citizens found for phone number: {phone}")
+        st.info("Try entering the phone number without any special characters (e.g., 7602690034)")
     
     return df
 
-# --- MAIN APP LAYOUT ---
-
-st.header("Search & Identification")
-
-# Updated Tab Names
-tab1, tab2 = st.tabs(["📱 Phone Number Search (Pre-Existed Customer)", "📝 Manual Entry (New customer)"])
-
-# --- TAB 1: PHONE SEARCH ---
-with tab1:
-    col_p1, col_p2 = st.columns([3, 1])
-    with col_p1:
-        phone_input = st.text_input("Enter Registered Phone Number", placeholder="e.g., 9800361474", key="phone_input_field")
-        st.caption("Try: 9800361474, 8293058992, 9845120211")
-    with col_p2:
-        st.write("##") # Spacer
-        search_phone_btn = st.button("Search Profile", key="btn_phone_search")
-
-    # Session State Management for Search
-    if search_phone_btn:
-        st.session_state['phone_search_active'] = True
-        st.session_state['current_phone'] = phone_input
-    
-    # Reset if input changes
-    if 'current_phone' in st.session_state and phone_input != st.session_state['current_phone']:
-            st.session_state['phone_search_active'] = False
-
-    if st.session_state.get('phone_search_active') and st.session_state.get('current_phone'):
-        phone = st.session_state['current_phone']
+if mode == "Phone Number":
+    phone = st.text_input("Enter Phone Number:", placeholder="e.g., 76026XXXXX")
+    st.caption("💡 Try sample phone numbers: 9800361474, 8293058992, 9845120211")
+    if phone:
         citizens_df = get_citizen_ids_by_phone(phone)
-        
         if not citizens_df.empty:
             for idx, citizen_row in citizens_df.iterrows():
                 citizen_id = citizen_row['citizen_id']
-                
-                # --- Citizen Profile Card ---
-                st.markdown("---")
-                st.subheader(f"👤 Profile: Citizen `{citizen_id}`")
-                
-                info_cols = st.columns(4)
-                
-                # Safe data retrieval
+                st.markdown(f"---\n### Recommendations for Citizen ID: `{citizen_id}`")
+                # --- Citizen Details Section ---
+                st.subheader("👤 Citizen Information")
+                info_cols = st.columns(5)
+                # Mask name: show first letter + ### if name is present
                 name_val = citizen_row.get('citizen_name', '-')
-                masked_name = '####' if isinstance(name_val, str) and name_val.strip() else '--'
-                
+                if isinstance(name_val, str) and name_val.strip():
+                    masked_name =  '####'
+                else:
+                    masked_name = '--'
+                info_cols[0].markdown(f"**Name:**<br>{masked_name}", unsafe_allow_html=True)
+                info_cols[1].markdown(f"**Gender:**<br>{citizen_row.get('gender','-')}", unsafe_allow_html=True)
+                # Show -- if age is missing or 0
                 age_val = citizen_row.get('age', '-')
-                age_display = str(age_val) if (not pd.isna(age_val) and age_val != 0) else '--'
+                if pd.isna(age_val) or age_val == 0:
+                    age_display = '--'
+                else:
+                    age_display = str(age_val)
+                info_cols[2].markdown(f"**Age:**<br>{age_display}", unsafe_allow_html=True)
+                info_cols[3].markdown(f"**Caste:**<br>{citizen_row.get('caste','-')}", unsafe_allow_html=True)
+                info_cols[4].markdown(f"**Religion:**<br>{citizen_row.get('religion','-')}", unsafe_allow_html=True)
 
-                with info_cols[0]: st.info(f"**Name:** {masked_name}")
-                with info_cols[1]: st.info(f"**Age:** {age_display}")
-                with info_cols[2]: st.info(f"**Gender:** {citizen_row.get('gender','-')}")
-                with info_cols[3]: st.info(f"**Caste:** {citizen_row.get('caste','-')}")
-
-                # --- History Section ---
-                st.write("##")
-                st.markdown("#### 📜 Service History")
+                # --- Services Used Section ---
                 services_df = get_services_used(citizen_id)
-                
-                used_service_ids = []
+                st.subheader("📝 Services Availed")
                 if not services_df.empty:
-                    # Count unique services
+                    # Show a table of unique services with count of times used, block any with birth or death
                     service_counts = services_df.groupby(['service_id', 'service_name']).size().reset_index(name='count')
-                    # Filter birth/death
+                    # Block any service containing "birth" or "death" (case-insensitive) in name
                     service_counts = service_counts[~service_counts['service_name'].str.lower().str.contains('birth|death', na=False)]
-                    service_counts = service_counts.sort_values(by='count', ascending=False)
+                    service_counts = service_counts.sort_values(by='count', ascending=False).reset_index(drop=True)
+                    st.markdown(f"**Total Unique Services Used:** {len(service_counts)}")
                     
-                    used_service_ids = service_counts['service_id'].unique().tolist()
-                    
-                    st.dataframe(
-                        service_counts.rename(columns={'service_name': 'Service Name', 'count': 'Times Used'})[['Service Name', 'Times Used']],
-                        use_container_width=True,
-                        hide_index=True
-                    )
-                else:
-                    st.info("No previous service history found.")
-
-                # --- Recommendation Selector ---
-                st.write("##")
-                st.markdown("#### 🎯 Get Recommendations")
-                
-                service_master_df = pd.read_csv(os.path.join(DATA_DIR, "services.csv"), encoding="utf-8")
-                service_master_df = service_master_df[~service_master_df['service_name'].str.lower().str.contains('birth|death', na=False)]
-                
-                service_options = [f"{row['service_id']} - {row['service_name']}" for _, row in service_master_df.iterrows()]
-                
-                sel_col1, sel_col2 = st.columns([3, 1])
-                with sel_col1:
-                    selected_service_str = st.selectbox(f"Current Service - What are they here for?", ["None"] + service_options, key=f"svc_sel_{citizen_id}")
-                
-                selected_service_id = None
-                if selected_service_str != "None":
-                        selected_service_id = int(selected_service_str.split(" - ")[0])
-
-                with sel_col2:
-                        st.write("##")
-                        generate_recs = st.button("Generate Recommendations", key=f"btn_rec_{citizen_id}")
-
-                # --- GENERATE RECOMMENDATIONS LOGIC (Phone Mode) ---
-                if generate_recs:
-                    with st.spinner("Analyzing profile and generating insights..."):
-                        district_id = int(citizen_row["district_id"])
-                        user_caste = citizen_row.get('caste', None)
-                        
-                        # Prepare IDs for logic
-                        item_service_ids = list(used_service_ids)
-                        if selected_service_id and selected_service_id not in item_service_ids:
-                            item_service_ids.append(selected_service_id)
-
-                        # Recs per service logic
-                        max_total_recs = 5
-                        recs_per_service = {}
-                        if item_service_ids:
-                            n_services = len(item_service_ids)
-                            if selected_service_id:
-                                recs_per_service[selected_service_id] = min(3, max_total_recs)
-                                remaining = max_total_recs - recs_per_service[selected_service_id]
-                                others = [s for s in item_service_ids if s != selected_service_id]
-                                if others:
-                                    base = remaining // len(others)
-                                    extra = remaining % len(others)
-                                    for i, s in enumerate(others): recs_per_service[s] = base + (1 if i < extra else 0)
-                            else:
-                                base = max_total_recs // n_services
-                                extra = max_total_recs % n_services
-                                for i, s in enumerate(item_service_ids): recs_per_service[s] = base + (1 if i < extra else 0)
-
-                        # --- RENDER RESULTS SECTION (Phone) ---
-                        st.markdown("---")
-                        st.subheader("🚀 Personalized Recommendations")
-                        
-                        res_c1, res_c2, res_c3 = st.columns(3)
-                        
-                        # Block Function
-                        def block_service(service, caste=None):
-                            if not isinstance(service, str): return False
-                            s = service.lower()
-                            if "birth" in s or "death" in s: return False
-                            if caste and caste.lower() == "general" and "caste" in s: return False
-                            return True
-
-                        # 1. District
-                        with res_c1:
-                            st.info("🏢 **District Trends**")
-                            top_dist = get_top_services_for_district_from_csv(DISTRICT_CSV_PATH, district_id, top_n=5)
-                            top_dist = [s for s in top_dist if block_service(s, user_caste)][:5]
-                            if top_dist:
-                                for s in top_dist: st.markdown(f"- {s}")
-                            else:
-                                st.write("No data available.")
-
-                        # 2. Demographic
-                        with res_c2:
-                            st.success("👥 **Demographic Match**")
-                            try:
-                                searched_name = None
-                                if selected_service_id:
-                                    try:
-                                            searched_name = service_master_df[service_master_df['service_id'] == selected_service_id]['service_name'].iloc[0]
-                                    except: pass
-                                
-                                demo_recs = recommend_services_2(
-                                    citizen_id=citizen_id,
-                                    df=final_df,
-                                    grouped_df=grouped_df,
-                                    cluster_service_map=cluster_service_map,
-                                    service_id_to_name=service_id_to_name,
-                                    service_df=service_df,
-                                    top_n=5,
-                                    citizen_master=get_citizen_details(citizen_id),
-                                    searched_service_name=searched_name
-                                )
-                                demo_recs = [s for s in demo_recs if isinstance(s, str) and block_service(s, user_caste)]
-                                if demo_recs:
-                                        for s in demo_recs: st.markdown(f"- {s}")
-                                else:
-                                    st.write("No data available.")
-                            except Exception as e:
-                                st.write("Grouping error.")
-
-                        # 3. Content
-                        with res_c3:
-                            st.warning("🔄 **Similar Services**")
-                            if item_service_ids:
-                                data_file = os.path.join(DATA_DIR, "service_with_domains.csv")
-                                sim_file = os.path.join(DATA_DIR, "openai_similarity_matrix.csv")
-                                found_any = False
-                                for sid in item_service_ids:
-                                    n = recs_per_service.get(sid, 0)
-                                    if n > 0:
-                                        try:
-                                            sims = find_similar_services_from_csv(data_file, sim_file, int(sid), n)
-                                            sims = [s for s in sims if isinstance(s,str) and block_service(s, user_caste)]
-                                            if sims:
-                                                found_any = True
-                                                # Try get name
-                                                s_name = str(sid)
-                                                try: s_name = service_master_df[service_master_df['service_id']==sid]['service_name'].iloc[0]
-                                                except: pass
-                                                st.markdown(f"**Because you used: {s_name}**")
-                                                for s in sims: st.markdown(f"- {s}")
-                                        except: pass
-                                if not found_any: st.write("No similar services found.")
-                            else:
-                                st.write("Select a service or use history for this.")
-
-
-# --- TAB 2: MANUAL ENTRY ---
-with tab2:
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        age = st.number_input("Age", min_value=1, max_value=120, value=25)
-    with c2:
-        gender = st.selectbox("Gender", ["Male", "Female", "Other"])
-    with c3:
-        caste = st.selectbox("Caste", ["General", "SC", "ST", "OBC-A", "OBC-B"])
-        
-    c4, c5 = st.columns(2)
-    with c4:
-            # District Selection with DEDUPLICATION FIX
-        district_df = pd.read_csv(DISTRICT_CSV_PATH, encoding="utf-8")
-        district_names = sorted(district_df['district_name'].dropna().unique().tolist())
-        selected_district_name = st.selectbox("District", district_names)
-        district_id = int(district_df[district_df['district_name'] == selected_district_name]['district_id'].iloc[0])
-    with c5:
-        religions = ["Hindu", "Muslim", "Christian", "Sikh", "Other"]
-        selected_religion = st.selectbox("Religion", religions)
-    
-    # Service Intent
-    service_master_df = pd.read_csv(os.path.join(DATA_DIR, "services.csv"), encoding="utf-8")
-    service_master_df = service_master_df[~service_master_df['service_name'].str.lower().str.contains('birth|death', na=False)]
-    service_options = [f"{row['service_id']} - {row['service_name']}" for _, row in service_master_df.iterrows()]
-    
-    selected_service_str_man = st.selectbox("Current Service - What are they here for?", ["None"] + service_options)
-    
-    st.write("##")
-    manual_submit = st.button("Generate Recommendations", key="btn_manual")
-
-    if manual_submit:
-        with st.spinner("Processing demographics..."):
-            # Groups
-            age_group = 'child' if age < 18 else ('youth' if age < 60 else 'elderly')
-            religion_group = 'Hindu' if selected_religion == 'Hindu' else 'Minority'
-            user_caste = caste
-            
-            selected_service_id = None
-            if selected_service_str_man != "None":
-                    selected_service_id = int(selected_service_str_man.split(" - ")[0])
-
-            # --- RENDER RESULTS SECTION (Manual) ---
-            st.markdown("---")
-            st.subheader("🚀 Personalized Recommendations")
-            
-            res_m1, res_m2, res_m3 = st.columns(3)
-            
-            # Block Function (Redefined for scope safe)
-            def block_service(service, caste=None):
-                if not isinstance(service, str): return False
-                s = service.lower()
-                if "birth" in s or "death" in s: return False
-                if caste and caste.lower() == "general" and "caste" in s: return False
-                return True
-
-            # 1. District
-            with res_m1:
-                st.info("🏢 **District Trends**")
-                top_dist = get_top_services_for_district_from_csv(DISTRICT_CSV_PATH, district_id, top_n=5)
-                top_dist = [s for s in top_dist if block_service(s, user_caste)][:5]
-                if top_dist:
-                    for s in top_dist: st.markdown(f"- {s}")
-                else:
-                    st.write("No data available.")
-            
-            # 2. Demographic
-            with res_m2:
-                st.success("👥 **Demographic Match**")
-                try:
-                    manual_data = pd.DataFrame([{
-                        'citizen_id': 'manual_entry',
-                        'gender': gender, 'caste': caste, 'age': age,
-                        'religion': selected_religion, 'age_group': age_group,
-                        'religion_group': religion_group, 'district_id': district_id
-                    }])
-
-                    searched_name = None
-                    if selected_service_id:
-                            searched_name = service_master_df[service_master_df['service_id'] == selected_service_id]['service_name'].iloc[0]
-
-                    demo_recs = recommend_services_2(
-                        citizen_id='manual_entry',
-                        df=final_df,
-                        grouped_df=grouped_df,
-                        cluster_service_map=cluster_service_map,
-                        service_id_to_name=service_id_to_name,
-                        service_df=service_df,
-                        top_n=5,
-                        citizen_master=manual_data,
-                        searched_service_name=searched_name
-                    )
-                    demo_recs = [s for s in demo_recs if isinstance(s, str) and block_service(s, user_caste)]
-                    if demo_recs:
-                            for s in demo_recs: st.markdown(f"- {s}")
-                    else:
-                        st.write("No data available.")
-                except Exception as e:
-                    st.write(f"Error: {e}")
-
-            # 3. Content
-            with res_m3:
-                st.warning("🔄 **Similar Services**")
-                if selected_service_id:
-                    data_file = os.path.join(DATA_DIR, "service_with_domains.csv")
-                    sim_file = os.path.join(DATA_DIR, "openai_similarity_matrix.csv")
+                    # Display service counts without pyarrow dependency
                     try:
-                        sims = find_similar_services_from_csv(data_file, sim_file, int(selected_service_id), 5)
-                        sims = [s for s in sims if isinstance(s,str) and block_service(s, user_caste)]
-                        if sims:
-                            st.markdown(f"**Similar to selected:**")
-                            for s in sims: st.markdown(f"- {s}")
-                        else:
-                            st.write("No similar services found.")
-                    except:
-                        st.write("Error fetching similarities.")
+                        import pyarrow
+                        st.table(service_counts.rename(columns={'service_id': 'Service ID', 'service_name': 'Service Name', 'count': 'Times Used'}))
+                    except ImportError:
+                        # Display as markdown table if pyarrow not available
+                        st.markdown("**Service Usage Details:**")
+                        display_df = service_counts.rename(columns={'service_id': 'Service ID', 'service_name': 'Service Name', 'count': 'Times Used'})
+                        
+                        # Create markdown table
+                        markdown_table = "| Service ID | Service Name | Times Used |\\n"
+                        markdown_table += "|------------|--------------|------------|\\n"
+                        
+                        for _, row in display_df.head(20).iterrows():  # Show top 20 services
+                            service_name = str(row['Service Name']).replace('|', '\\|')  # Escape pipes
+                            markdown_table += f"| {row['Service ID']} | {service_name} | {row['Times Used']} |\\n"
+                        
+                        if len(display_df) > 20:
+                            markdown_table += f"| ... | ... | ... |\\n"
+                            markdown_table += f"| Total: {len(display_df)} services | | |\\n"
+                        
+                        st.markdown(markdown_table)
+                    except Exception as e:
+                        st.error(f"Error displaying table: {e}")
+                        # Fallback to simple text display
+                        st.markdown("**Service Usage (Text Format):**")
+                        for _, row in service_counts.head(10).iterrows():
+                            st.text(f"Service {row['service_id']}: {row['service_name']} (Used {row['count']} times)")
+                        if len(service_counts) > 10:
+                            st.text(f"... and {len(service_counts) - 10} more services")
                 else:
-                    st.write("Select a 'Target Service' to see similar recommendations.")
+                    st.info("No services found for this citizen.")
+
+                # --- Service selection for item-based recommendations ---
+                service_master_df = pd.read_csv(os.path.join(DATA_DIR, "services.csv"), encoding="utf-8")
+                # Block any service containing "birth" or "death" (case-insensitive) in name from dropdown
+                service_master_df = service_master_df[~service_master_df['service_name'].str.lower().str.contains('birth|death', na=False)]
+                service_options = [
+                    f"{row['service_id']} - {row['service_name']}" for _, row in service_master_df.iterrows()
+                ]
+                selected_service = st.selectbox(
+                    f"Select the service the user came to apply for (Citizen ID: {citizen_id}):",
+                    options=service_options,
+                    key=f"service_select_{citizen_id}"
+                )
+                selected_service_id = int(selected_service.split(" - ")[0]) if selected_service else None
+
+                if st.button(f"Recommend for {citizen_id}"):
+                    # Check if user is under 18
+                    user_age = citizen_row.get('age', None)
+                    is_under_18 = user_age is not None and user_age < 18
+                    
+                    district_id = int(citizen_row["district_id"])
+                    used_service_ids = services_df['service_id'].dropna().unique() if not services_df.empty else []
+                    item_service_ids = list(used_service_ids) + ([selected_service_id] if selected_service_id and selected_service_id not in used_service_ids else [])
+                    # --- Improved balanced logic for item-based recommendations ---
+                    max_total_recs = 5
+                    n_services = len(item_service_ids)
+                    recs_per_service = {}
+                    if n_services > 0:
+                        if selected_service_id and selected_service_id in item_service_ids:
+                            recs_per_service[selected_service_id] = min(3, max_total_recs)
+                            remaining_recs = max_total_recs - recs_per_service[selected_service_id]
+                            other_services = [sid for sid in item_service_ids if sid != selected_service_id]
+                            n_other = len(other_services)
+                            if n_other > 0:
+                                base = remaining_recs // n_other
+                                extra = remaining_recs % n_other
+                                for i, sid in enumerate(other_services):
+                                    recs_per_service[sid] = base + (1 if i < extra else 0)
+                        else:
+                            base = max_total_recs // n_services
+                            extra = max_total_recs % n_services
+                            for i, sid in enumerate(item_service_ids):
+                                recs_per_service[sid] = base + (1 if i < extra else 0)
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.markdown("🏢 **District Recommendations**")
+                        st.caption("Recommends the most popular services within a user's district based on historical service usage trends.")
+                        top_services = get_top_services_for_district_from_csv(DISTRICT_CSV_PATH, district_id, top_n=5)
+                        def block_service(service, caste=None):
+                            if not isinstance(service, str):
+                                return False
+                            s = service.lower()
+                            if "birth" in s or "death" in s:
+                                return False
+                            if caste is not None and caste.lower() == "general" and "caste" in s:
+                                return False
+                            return True
+                        user_caste = citizen_row.get('caste', None)
+                        top_services = [service for service in top_services if block_service(service, user_caste)][:5]
+                        if top_services:
+                            st.markdown("**Top Services in District:**")
+                            st.markdown("<ul>" + "".join([f"<li>{service}</li>" for service in top_services]) + "</ul>", unsafe_allow_html=True)
+                        else:
+                            st.info("No district recommendations found.")
+                    with col2:
+                        st.markdown("👥 **Demographic Recommendations**")
+                        st.caption("Suggests services using demographic clustering based on attributes like age, gender, caste, and religion for users.")
+                        try:
+                            # Get citizen master data for this citizen
+                            citizen_master_data = get_citizen_details(citizen_id)
+                            # Get searched service name from selected service
+                            searched_service_name = None
+                            if n_services > 0 and item_service_ids:
+                                # Get the first service name as searched service
+                                first_sid = item_service_ids[0]
+                                if not services_df.empty and first_sid in services_df['service_id'].values:
+                                    searched_service_name = services_df[services_df['service_id'] == first_sid]['service_name'].iloc[0]
+                                elif not service_master_df.empty and first_sid in service_master_df['service_id'].values:
+                                    searched_service_name = service_master_df[service_master_df['service_id'] == first_sid]['service_name'].iloc[0]
+                            
+                            demo_recommendations = recommend_services_2(
+                                citizen_id=citizen_id,
+                                df=final_df,
+                                grouped_df=grouped_df,
+                                cluster_service_map=cluster_service_map,
+                                service_id_to_name=service_id_to_name,
+                                service_df=service_df,
+                                top_n=5,
+                                citizen_master=citizen_master_data,
+                                searched_service_name=searched_service_name
+                            )
+                            
+                            # Block any service containing "birth" or "death" (case-insensitive)
+                            filtered_demo_recommendations = [service for service in demo_recommendations if isinstance(service, str) and block_service(service, user_caste)]
+                            if filtered_demo_recommendations:
+                                st.markdown("**Top Demographic Recommendations:**")
+                                st.markdown("<ul>" + "".join([f"<li>{service}</li>" for service in filtered_demo_recommendations]) + "</ul>", unsafe_allow_html=True)
+                            else:
+                                st.info("No demographic recommendations found.")
+                        except Exception as e:
+                            st.error(f"Error in demographic recommendations: {e}")
+                    with col3:
+                        st.markdown("🔄 **Content-based Recommendations**")
+                        st.caption("Recommends semantically similar services to those already used by the citizen using embeddings and cosine similarity on enriched service descriptions.")
+                        data_file = os.path.join(DATA_DIR, "service_with_domains.csv")
+                        similarity_file = os.path.join(DATA_DIR, "openai_similarity_matrix.csv")
+                        if n_services > 0:
+                            for sid in item_service_ids:
+                                try:
+                                    sid_int = int(sid)
+                                    num_similar_services = recs_per_service.get(sid, 0)
+                                    if num_similar_services <= 0:
+                                        continue
+                                    similar_services = find_similar_services_from_csv(
+                                        data_file, similarity_file, sid_int, num_similar_services
+                                    )
+                                    # Block any service containing "birth" or "death" (case-insensitive) in content-based recs
+                                    import re
+                                    def clean_service_name(name):
+                                        if not isinstance(name, str):
+                                            return name
+                                        # Replace all non-alphanumeric (except space and dash) with space
+                                        cleaned = re.sub(r'[^\\w\\s\\-]', ' ', name)
+                                        # Replace multiple spaces with single space
+                                        cleaned = re.sub(r'\\s+', ' ', cleaned)
+                                        # Remove leading/trailing spaces and dashes
+                                        cleaned = cleaned.strip(' -')
+                                        # Remove trailing/leading asterisks and spaces
+                                        cleaned = cleaned.strip(' *')
+                                        return cleaned
+                                    filtered_similar_services = [sim_name for sim_name in similar_services if isinstance(sim_name, str) and block_service(sim_name, user_caste)]
+                                    
+                                    # Find the service name for display and clean it
+                                    if not services_df.empty and sid in services_df['service_id'].values:
+                                        service_name = services_df[services_df['service_id'] == sid]['service_name'].iloc[0]
+                                    else:
+                                        service_name = service_master_df[service_master_df['service_id'] == sid]['service_name'].iloc[0]
+                                    service_name = service_name
+                                    
+                                    if filtered_similar_services:
+                                        st.markdown(f"**{service_name}**")
+                                        st.markdown("<ul>" + "".join([f"<li>{sim_name}</li>" for sim_name in filtered_similar_services]) + "</ul>", unsafe_allow_html=True)
+                                except Exception as e:
+                                    st.write(f"Error for service_id {sid}: {e}")
+                        else:
+                            st.info("No item-based recommendations available (no services used).")
+        else:
+            st.error("No citizens found for this phone number.")
+
+elif mode == "Manual Entry":
+    st.subheader("Enter Demographic and Location Details")
+    # --- District selection by name ---
+    district_df = pd.read_csv(DISTRICT_CSV_PATH, encoding="utf-8")
+    district_names = district_df['district_name'].tolist()
+    selected_district_name = st.selectbox("District", district_names)
+    district_id = int(district_df[district_df['district_name'] == selected_district_name]['district_id'].iloc[0])
+
+    gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+    caste = st.selectbox("Caste", ["General", "SC", "ST", "OBC-A", "OBC-B"])
+    # --- Age input and group inference ---
+    age = st.number_input("Age", min_value=0, max_value=120, step=1)
+    
+    # Calculate age group without pandas
+    if age < 18:
+        age_group = 'child'
+    elif age < 60:
+        age_group = 'youth'
+    else:
+        age_group = 'elderly'
+    # --- Religion selection and grouping ---
+    religions = ["Hindu", "Muslim", "Christian", "Sikh", "Other"]
+    selected_religion = st.selectbox("Religion", religions)
+    religion_group = "Hindu" if selected_religion == "Hindu" else "Minority"
+
+    # --- Service selection ---
+    service_master_df = pd.read_csv(os.path.join(DATA_DIR, "services.csv"), encoding="utf-8")
+    # Block any service containing "birth" or "death" (case-insensitive) in name from dropdown
+    service_master_df = service_master_df[~service_master_df['service_name'].str.lower().str.contains('birth|death', na=False)]
+    service_options = [
+        f"{row['service_id']} - {row['service_name']}" for _, row in service_master_df.iterrows()
+    ]
+    selected_service = st.selectbox(
+        "Select a service for item-based recommendations:",
+        options=service_options
+    )
+    selected_service_id = int(selected_service.split(" - ")[0]) if selected_service else None
+
+    if st.button("Recommend"):
+        # --- Item-based recommendation logic: only the selected service, up to 5 ---
+        item_service_ids = [selected_service_id] if selected_service_id else []
+        max_total_recs = 5
+        n_services = len(item_service_ids)
+        recs_per_service = {}
+        if n_services > 0:
+            recs_per_service[selected_service_id] = min(3, max_total_recs)
+            remaining_recs = max_total_recs - recs_per_service[selected_service_id]
+            # No other services in manual mode, so all go to selected
+            recs_per_service[selected_service_id] += remaining_recs
+
+        col1, col2, col3 = st.columns(3)
+        # --- District Recommendations ---
+        with col1:
+            st.markdown("🏢 **District Recommendations**")
+            st.caption("Recommends the most popular services within a user's district based on historical service usage trends.")
+            top_services = get_top_services_for_district_from_csv(DISTRICT_CSV_PATH, district_id, top_n=5)
+            def block_service(service, caste=None):
+                if not isinstance(service, str):
+                    return False
+                s = service.lower()
+                if "birth" in s or "death" in s:
+                    return False
+                if caste is not None and caste.lower() == "general" and "caste" in s:
+                    return False
+                return True
+            user_caste = caste
+            top_services = [service for service in top_services if block_service(service, user_caste)][:5]
+            if top_services:
+                st.markdown("**Top Services in District:**")
+                st.markdown("<ul>" + "".join([f"<li>{service}</li>" for service in top_services]) + "</ul>", unsafe_allow_html=True)
+            else:
+                st.info("No district recommendations found.")
+
+        # --- Demographic Recommendations ---
+        with col2:
+            st.markdown("👥 **Demographic Recommendations**")
+            st.caption("Suggests services using demographic clustering based on attributes like age, gender, caste, and religion for users.")
+            
+            try:
+                # Create a DataFrame with the manual entry data
+                manual_citizen_data = pd.DataFrame([{
+                    'citizen_id': 'manual_entry',
+                    'gender': gender,
+                    'caste': caste,
+                    'age': age,
+                    'religion': selected_religion,
+                    'age_group': age_group,
+                    'religion_group': religion_group,
+                    'district_id': district_id
+                }])
+                
+                # Get searched service name
+                searched_service_name = None
+                if selected_service_id and not service_master_df.empty:
+                    service_row = service_master_df[service_master_df['service_id'] == selected_service_id]
+                    if not service_row.empty:
+                        searched_service_name = service_row['service_name'].iloc[0]
+                
+                demo_recommendations = recommend_services_2(
+                    citizen_id='manual_entry',
+                    df=final_df,
+                    grouped_df=grouped_df,
+                    cluster_service_map=cluster_service_map,
+                    service_id_to_name=service_id_to_name,
+                    service_df=service_df,
+                    top_n=5,
+                    citizen_master=manual_citizen_data,
+                    searched_service_name=searched_service_name
+                )
+                filtered_demo_recommendations = [service for service in demo_recommendations if isinstance(service, str) and block_service(service, caste)]
+                if filtered_demo_recommendations:
+                    st.markdown("**Top Demographic Recommendations:**")
+                    st.markdown("<ul>" + "".join([f"<li>{service}</li>" for service in filtered_demo_recommendations]) + "</ul>", unsafe_allow_html=True)
+                else:
+                    st.info("No demographic recommendations found.")
+            except Exception as e:
+                st.error(f"Error in demographic recommendations: {e}")
+
+        # --- Item-based Recommendations ---
+        with col3:
+            st.markdown("🔄 **Content-based Recommendations**")
+            st.caption("Recommends semantically similar services to those already used by the citizen using embeddings and cosine similarity on enriched service descriptions.")
+            data_file = os.path.join(DATA_DIR, "service_with_domains.csv")
+            similarity_file = os.path.join(DATA_DIR, "openai_similarity_matrix.csv")
+            if n_services > 0:
+                for sid in item_service_ids:
+                    try:
+                        sid_int = int(sid)
+                        num_similar_services = recs_per_service.get(sid, 0)
+                        if num_similar_services <= 0:
+                            continue
+                        # Limit content-based recommendations to 5
+                        num_similar_services = min(num_similar_services, 5)
+                        similar_services = find_similar_services_from_csv(
+                            data_file, similarity_file, sid_int, num_similar_services
+                        )
+                        service_name = service_master_df[service_master_df['service_id'] == sid]['service_name'].iloc[0]
+                        filtered_similar_services = [sim_name for sim_name in similar_services if isinstance(sim_name, str) and block_service(sim_name, caste)]
+                        st.markdown(f"**{service_name}**")
+                        st.markdown("<ul>" + "".join([f"<li>{sim_name}</li>" for sim_name in filtered_similar_services]) + "</ul>", unsafe_allow_html=True)
+                    except Exception as e:
+                        st.write(f"Error for service_id {sid}: {e}")
+            else:
+                st.info("No item-based recommendations available (no service selected).")

@@ -23,6 +23,11 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Large data files (too big for free hosting)
+data/final_df.csv
+data/ml_citizen_master.csv
+data/ml_provision.csv
+
 # Virtual environments
 venv/
 env/

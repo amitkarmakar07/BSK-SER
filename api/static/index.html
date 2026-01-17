@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangla Sahayata Kendra - Service Recommendation System</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <h1>🏛️ Bangla Sahayata Kendra</h1>
+                <p class="tagline">Government of West Bengal - Service Recommendation System</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Mode Selection -->
+            <div class="mode-selection">
+                <h2>Select Input Mode</h2>
+                <div class="mode-buttons">
+                    <button class="mode-btn active" onclick="switchMode('phone')" id="phoneBtn">
+                        📱 Phone Number
+                    </button>
+                    <button class="mode-btn" onclick="switchMode('manual')" id="manualBtn">
+                        ✍️ Manual Entry
+                    </button>
+                </div>
+            </div>
+
+            <!-- Phone Number Mode -->
+            <div id="phoneMode" class="input-section">
+                <div class="form-card">
+                    <h3>Search by Phone Number</h3>
+                    <div class="form-group">
+                        <label for="phoneInput">Phone Number</label>
+                        <input type="text" id="phoneInput" placeholder="e.g., 76026XXXXX" class="form-input">
+                        <small class="hint">💡 Try sample: 9800361474, 8293058992, 9845120211</small>
+                    </div>
+                    <button onclick="searchByPhone()" class="btn btn-primary">Search Citizen</button>
+                </div>
+
+                <!-- Citizen Details Section -->
+                <div id="citizenDetails" class="citizen-details" style="display: none;">
+                    <h3>👤 Citizen Information</h3>
+                    <div class="info-grid" id="citizenInfo"></div>
+                    
+                    <h3 class="section-title">📝 Services Availed</h3>
+                    <div id="servicesUsed" class="services-list"></div>
+                    
+                    <div class="form-group">
+                        <label for="serviceSelect">Select Service to Apply For</label>
+                        <select id="serviceSelect" class="form-input">
+                            <option value="">-- Select a Service --</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="getRecommendations('phone')" class="btn btn-primary">Get Recommendations</button>
+                </div>
+            </div>
+
+            <!-- Manual Entry Mode -->
+            <div id="manualMode" class="input-section" style="display: none;">
+                <div class="form-card">
+                    <h3>Enter Demographic Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="districtSelect">District *</label>
+                            <select id="districtSelect" class="form-input" required>
+                                <option value="">-- Select District --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="genderSelect">Gender *</label>
+                            <select id="genderSelect" class="form-input" required>
+                                <option value="">-- Select Gender --</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ageInput">Age *</label>
+                            <input type="number" id="ageInput" class="form-input" min="0" max="120" placeholder="Enter age" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="casteSelect">Caste *</label>
+                            <select id="casteSelect" class="form-input" required>
+                                <option value="">-- Select Caste --</option>
+                                <option value="General">General</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                                <option value="OBC-A">OBC-A</option>
+                                <option value="OBC-B">OBC-B</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="religionSelect">Religion *</label>
+                            <select id="religionSelect" class="form-input" required>
+                                <option value="">-- Select Religion --</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Christian">Christian</option>
+                                <option value="Sikh">Sikh</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="manualServiceSelect">Service to Apply For *</label>
+                            <select id="manualServiceSelect" class="form-input" required>
+                                <option value="">-- Select a Service --</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button onclick="getRecommendations('manual')" class="btn btn-primary">Get Recommendations</button>
+                </div>
+            </div>
+
+            <!-- Recommendations Section -->
+            <div id="recommendationsSection" class="recommendations-section" style="display: none;">
+                <h2 class="section-header">🎯 Service Recommendations</h2>
+                
+                <div class="recommendations-grid">
+                    <!-- District Recommendations -->
+                    <div class="recommendation-card">
+                        <div class="card-header district-header">
+                            <h3>🏢 District Recommendations</h3>
+                            <p class="card-description">Most popular services in your district based on historical usage</p>
+                        </div>
+                        <div class="card-body" id="districtRecs"></div>
+                    </div>
+                    
+                    <!-- Demographic Recommendations -->
+                    <div class="recommendation-card">
+                        <div class="card-header demographic-header">
+                            <h3>👥 Demographic Recommendations</h3>
+                            <p class="card-description">Services suggested based on age, gender, caste, and religion</p>
+                        </div>
+                        <div class="card-body" id="demographicRecs"></div>
+                    </div>
+                    
+                    <!-- Content-based Recommendations -->
+                    <div class="recommendation-card">
+                        <div class="card-header content-header">
+                            <h3>🔄 Content-based Recommendations</h3>
+                            <p class="card-description">Similar services based on semantic analysis</p>
+                        </div>
+                        <div class="card-body" id="contentRecs"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading recommendations...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Bangla Sahayata Kendra | Government of West Bengal</p>
+            <p class="footer-note">Powered by AI-driven Service Recommendation System</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
