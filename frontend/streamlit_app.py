@@ -90,16 +90,16 @@ def check_service_eligibility(service_name, user_age, user_gender, user_caste, u
     
     service_row = service_row.iloc[0]
     
-    # Check for_all column first
-    if service_row.get('for_all', 0) == 1:
-        return True  # Service is for everyone
-    
-    # Check age eligibility
+    # Check age eligibility FIRST
     min_age = service_row.get('min_age', 0)
     max_age = service_row.get('max_age', 120)
     if not pd.isna(min_age) and not pd.isna(max_age):
         if user_age < min_age or user_age > max_age:
             return False
+
+    # Check for_all column
+    if service_row.get('for_all', 0) == 1:
+        return True  # Service is for everyone (if age is valid)
     
     # Check caste eligibility
     if user_caste == 'SC' and service_row.get('is_sc', 0) == 0:
@@ -282,7 +282,7 @@ def block_service(service, caste=None):
 # ==========================================
 # --- PAGE TITLE ---
 # ==========================================
-st.title("🧑‍💼 Service Recommendation for BSK Users")
+st.title("Bangla Sahayata Kendra")
 
 # ==========================================
 # --- UNIFIED SINGLE FORM ---
@@ -604,7 +604,7 @@ if st.button("🚀 Generate Recommendations", type="primary"):
                 hide_index=True
             )
             
-            st.success(f"✅ **{len(eligible_services)} eligible services found** out of {len(all_recommendations)} total recommendations")
+            st.success("✅ **Eligible services found**")
         else:
             st.warning("⚠️ No services match your eligibility criteria from the recommendations.")
     else:
