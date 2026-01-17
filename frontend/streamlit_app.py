@@ -244,6 +244,74 @@ def preprocess_data(citizen_data, provision_data):
     return df
 
 DISTRICT_CSV_PATH = os.path.join(DATA_DIR, "district_top_services.csv")
+BLOCK_CSV_PATH = os.path.join(DATA_DIR, "block_wise_top_services.csv")
+
+@st.cache_data
+def load_block_data():
+    """Load block-wise top services from CSV."""
+    try:
+        df = pd.read_csv(BLOCK_CSV_PATH, encoding='utf-8')
+        return df
+    except Exception as e:
+        st.warning(f"Could not load block_wise_top_services.csv: {e}")
+        return pd.DataFrame()
+
+def get_top_services_for_block(block_id, top_n=5):
+    """Get top N services for a specific block."""
+    block_df = load_block_data()
+    if block_df.empty:
+        return []
+    
+    # Filter by block_id and sort by rank
+    block_services = block_df[block_df['block_id'] == block_id].sort_values('rank_in_block')
+    
+    # Get top N service names
+    top_services = block_services.head(top_n)['service_name'].tolist()
+    return top_services
+
+@st.cache_data
+def get_block_id_for_citizen(citizen_id):
+    """Get block_id for a citizen based on their latest service provision."""
+    try:
+        # Load provision data
+        provision_data = load_provision_data()
+        if provision_data.empty:
+            return None
+        
+        # Get citizen's provision records
+        citizen_provisions = provision_data[provision_data['customer_id'] == citizen_id]
+        if citizen_provisions.empty:
+            return None
+        
+        # Get the most recent provision (if prov_date exists, otherwise first record)
+        if 'prov_date' in citizen_provisions.columns:
+            latest_provision = citizen_provisions.sort_values('prov_date', ascending=False).iloc[0]
+        else:
+            latest_provision = citizen_provisions.iloc[0]
+        
+        # Extract bsk_id
+        bsk_id = latest_provision.get('bsk_id', None)
+        if pd.isna(bsk_id):
+            return None
+        
+        # Load BSK master to get block_mun_id
+        bsk_master_path = os.path.join(DATA_DIR, "ml_bsk_master.csv")
+        if not os.path.exists(bsk_master_path):
+            return None
+        
+        bsk_master = pd.read_csv(bsk_master_path, encoding='latin-1')
+        bsk_record = bsk_master[bsk_master['bsk_id'] == bsk_id]
+        
+        if bsk_record.empty:
+            return None
+        
+        # Get block_mun_id (this is the block_id in block_wise_top_services.csv)
+        block_mun_id = bsk_record.iloc[0].get('block_mun_id', None)
+        return block_mun_id if not pd.isna(block_mun_id) else None
+        
+    except Exception as e:
+        print(f"Error getting block_id for citizen {citizen_id}: {e}")
+        return None
 
 st.set_page_config(page_title="Service Recommendation for BSK Users", page_icon="🧑‍💼", layout="wide")
 st.title("🧑‍💼 Service Recommendation for BSK Users")
@@ -375,6 +443,10 @@ if mode == "Phone Number":
                     is_under_18 = user_age is not None and user_age < 18
                     
                     district_id = int(citizen_row["district_id"])
+                    
+                    # Get block_id for this citizen
+                    citizen_block_id = get_block_id_for_citizen(citizen_id)
+                    
                     used_service_ids = services_df['service_id'].dropna().unique() if not services_df.empty else []
                     item_service_ids = list(used_service_ids) + ([selected_service_id] if selected_service_id and selected_service_id not in used_service_ids else [])
                     # --- Improved balanced logic for item-based recommendations ---
@@ -397,7 +469,7 @@ if mode == "Phone Number":
                             extra = max_total_recs % n_services
                             for i, sid in enumerate(item_service_ids):
                                 recs_per_service[sid] = base + (1 if i < extra else 0)
-                    col1, col2, col3 = st.columns(3)
+                    col1, col2, col3, col4 = st.columns(4)
                     with col1:
                         st.markdown("🏢 **District Recommendations**")
                         st.caption("Recommends the most popular services within a user's district based on historical service usage trends.")
@@ -419,6 +491,22 @@ if mode == "Phone Number":
                         else:
                             st.info("No district recommendations found.")
                     with col2:
+                        st.markdown("🏘️ **Block Recommendations**")
+                        st.caption("Recommends the most popular services within a user's block based on historical service usage trends.")
+                        
+                        if citizen_block_id:
+                            block_services = get_top_services_for_block(citizen_block_id, top_n=5)
+                            block_services = [service for service in block_services if block_service(service, user_caste)][:5]
+                            
+                            if block_services:
+                                st.markdown("**Top Services in Block:**")
+                                st.markdown("<ul>" + "".join([f"<li>{service}</li>" for service in block_services]) + "</ul>", unsafe_allow_html=True)
+                            else:
+                                st.info("No block recommendations found.")
+                        else:
+                            st.info("Block information not available for this citizen.")
+                    
+                    with col3:
                         st.markdown("👥 **Demographic Recommendations**")
                         st.caption("Suggests services using demographic clustering based on attributes like age, gender, caste, and religion for users.")
                         try:
@@ -455,7 +543,7 @@ if mode == "Phone Number":
                                 st.info("No demographic recommendations found.")
                         except Exception as e:
                             st.error(f"Error in demographic recommendations: {e}")
-                    with col3:
+                    with col4:
                         st.markdown("🔄 **Content-based Recommendations**")
                         st.caption("Recommends semantically similar services to those already used by the citizen using embeddings and cosine similarity on enriched service descriptions.")
                         data_file = os.path.join(DATA_DIR, "service_with_domains.csv")
@@ -510,6 +598,22 @@ elif mode == "Manual Entry":
     district_names = district_df['district_name'].tolist()
     selected_district_name = st.selectbox("District", district_names)
     district_id = int(district_df[district_df['district_name'] == selected_district_name]['district_id'].iloc[0])
+    
+    # --- Block selection by name ---
+    block_df = load_block_data()
+    if not block_df.empty:
+        # Get unique blocks with their names
+        unique_blocks = block_df[['block_id', 'block_name']].drop_duplicates().sort_values('block_name')
+        block_options = [f"{row['block_id']} - {row['block_name']}" for _, row in unique_blocks.iterrows()]
+        selected_block = st.selectbox("Block (Optional)", ["None"] + block_options)
+        
+        if selected_block != "None":
+            selected_block_id = int(selected_block.split(" - ")[0])
+        else:
+            selected_block_id = None
+    else:
+        selected_block_id = None
+        st.info("Block selection not available (block_wise_top_services.csv missing)")
 
     gender = st.selectbox("Gender", ["Male", "Female", "Other"])
     caste = st.selectbox("Caste", ["General", "SC", "ST", "OBC-A", "OBC-B"])
@@ -553,7 +657,7 @@ elif mode == "Manual Entry":
             # No other services in manual mode, so all go to selected
             recs_per_service[selected_service_id] += remaining_recs
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         # --- District Recommendations ---
         with col1:
             st.markdown("🏢 **District Recommendations**")
@@ -575,9 +679,26 @@ elif mode == "Manual Entry":
                 st.markdown("<ul>" + "".join([f"<li>{service}</li>" for service in top_services]) + "</ul>", unsafe_allow_html=True)
             else:
                 st.info("No district recommendations found.")
+        
+        # --- Block Recommendations ---
+        with col2:
+            st.markdown("🏘️ **Block Recommendations**")
+            st.caption("Recommends the most popular services within a user's block based on historical service usage trends.")
+            
+            if selected_block_id:
+                block_services = get_top_services_for_block(selected_block_id, top_n=5)
+                block_services = [service for service in block_services if block_service(service, user_caste)][:5]
+                
+                if block_services:
+                    st.markdown("**Top Services in Block:**")
+                    st.markdown("<ul>" + "".join([f"<li>{service}</li>" for service in block_services]) + "</ul>", unsafe_allow_html=True)
+                else:
+                    st.info("No block recommendations found.")
+            else:
+                st.info("Please select a block to see recommendations.")
 
         # --- Demographic Recommendations ---
-        with col2:
+        with col3:
             st.markdown("👥 **Demographic Recommendations**")
             st.caption("Suggests services using demographic clustering based on attributes like age, gender, caste, and religion for users.")
             
@@ -622,7 +743,7 @@ elif mode == "Manual Entry":
                 st.error(f"Error in demographic recommendations: {e}")
 
         # --- Item-based Recommendations ---
-        with col3:
+        with col4:
             st.markdown("🔄 **Content-based Recommendations**")
             st.caption("Recommends semantically similar services to those already used by the citizen using embeddings and cosine similarity on enriched service descriptions.")
             data_file = os.path.join(DATA_DIR, "service_with_domains.csv")
