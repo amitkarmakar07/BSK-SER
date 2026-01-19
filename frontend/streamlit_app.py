@@ -287,7 +287,7 @@ st.title("Bangla Sahayata Kendra")
 # ==========================================
 # --- UNIFIED SINGLE FORM ---
 # ==========================================
-st.subheader("📋 Enter User Details")
+st.subheader("📋 Enter Citizen Details")
 
 # Load data for dropdowns
 district_df = pd.read_csv(DISTRICT_CSV_PATH, encoding="utf-8")
@@ -297,7 +297,7 @@ service_master_df = pd.read_csv(os.path.join(DATA_DIR, "services.csv"), encoding
 service_master_df = service_master_df[~service_master_df['service_name'].str.lower().str.contains('birth|death', na=False)]
 
 # --- Row 1: Phone Number ---
-phone = st.text_input("📱 Mobile Number (Enter to check existing user)", placeholder="e.g., 9800361474")
+phone = st.text_input("📱 Mobile Number (Enter to check existing Citizen)", placeholder="e.g., 9800361474")
 st.caption("💡 If phone exists in our records, we'll show service history. Otherwise, enter details manually below.")
 
 # --- Row 2: Age, Gender, Caste ---
@@ -318,7 +318,7 @@ with col5:
     if not block_df.empty:
         unique_blocks = block_df[['block_id', 'block_name']].drop_duplicates().sort_values('block_name')
         block_options = [f"{row['block_id']} - {row['block_name']}" for _, row in unique_blocks.iterrows()]
-        selected_block = st.selectbox("Block (Optional)", ["None"] + block_options)
+        selected_block = st.selectbox("Block/Municipality", ["None"] + block_options)
         selected_block_id = int(selected_block.split(" - ")[0]) if selected_block != "None" else None
     else:
         selected_block_id = None
@@ -329,7 +329,7 @@ with col6:
 
 # --- Row 4: Current Service Selection ---
 service_options = [f"{row['service_id']} - {row['service_name']}" for _, row in service_master_df.iterrows()]
-selected_service = st.selectbox("🎯 Service user came to apply for:", options=service_options)
+selected_service = st.selectbox("🎯 Service Citizen came to apply for:", options=service_options)
 selected_service_id = int(selected_service.split(" - ")[0]) if selected_service else None
 
 # --- Generate Recommendations Button ---
@@ -359,7 +359,7 @@ if st.button("🚀 Generate Recommendations", type="primary"):
     
     # --- Display User Status ---
     if citizen_exists:
-        st.success(f"✅ **Existing User Found!** Citizen ID: `{citizen_id}`")
+        st.success(f"✅ **Existing Citizen Found!** Citizen ID: `{citizen_id}`")
         
         # Show citizen info
         info_cols = st.columns(5)
